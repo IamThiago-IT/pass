@@ -17,8 +17,10 @@ export function Header() {
   return (
     <header className="border-b bg-background">
       <div className="flex items-center justify-between px-8 h-14">
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3 text-sm">
           <SidebarTrigger className="h-9 w-9 rounded-md border border-border/60" />
+          <span className="h-5 w-px bg-border" />
+          <span className="font-medium text-foreground">Transfer</span>
         </div>
 
         {/* Right section - Search, Controls, User */}
