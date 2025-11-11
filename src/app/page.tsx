@@ -1,4 +1,7 @@
+"use client";
+
 import type { Metadata } from "next";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Header } from "@/components/header";
@@ -17,15 +20,13 @@ import {
   Plus,
   ChevronLeft,
   ChevronRight,
+  ArrowUp,
+  ArrowDown,
   ChevronDown,
   ArrowUpDown,
   RefreshCcw,
   PanelsTopLeft,
 } from "lucide-react";
-
-export const metadata: Metadata = {
-  title: "Transfer",
-};
 
 const transfers = [
   {
