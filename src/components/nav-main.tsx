@@ -14,31 +14,42 @@ export function NavMain({
   items,
 }: {
   items: {
-    title: string
-    url: string
-    icon?: LucideIcon
-    isActive?: boolean
+    group: string
+    items: {
+      title: string
+      url: string
+      icon?: LucideIcon
+      isActive?: boolean
+    }[]
   }[]
 }) {
   return (
-    <SidebarGroup>
-      <SidebarGroupLabel>Platform</SidebarGroupLabel>
-      <SidebarMenu>
-        {items.map((item) => (
-          <SidebarMenuItem key={item.title}>
-            <SidebarMenuButton
-              asChild
-              tooltip={item.title}
-              isActive={item.isActive}
-            >
-              <a href={item.url}>
-                {item.icon && <item.icon />}
-                <span>{item.title}</span>
-              </a>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-        ))}
-      </SidebarMenu>
-    </SidebarGroup>
+    <>
+      {items.map((group) => (
+        <SidebarGroup key={group.group}>
+          <SidebarGroupLabel className="text-sm">{group.group}</SidebarGroupLabel>
+          <SidebarMenu>
+            {group.items.map((item) => (
+              <SidebarMenuItem
+                key={item.title}
+                className={item.isActive ? "" : "opacity-40"}
+              >
+                <SidebarMenuButton
+                  asChild
+                  tooltip={item.title}
+                  isActive={item.isActive}
+                  className="text-sm py-2 px-4"
+                >
+                  <a href={item.url}>
+                    {item.icon && <item.icon className="h-5 w-5" />}
+                    <span className="text-sm font-bold">{item.title}</span>
+                  </a>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            ))}
+          </SidebarMenu>
+        </SidebarGroup>
+      ))}
+    </>
   )
 }

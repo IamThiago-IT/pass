@@ -2,16 +2,26 @@
 
 import * as React from "react"
 import {
-  AudioWaveform,
+  Zap,
+  LayoutGrid,
+  Activity,
+  Briefcase,
+  Home,
+  Plane,
+  Eye,
+  Radio,
+  DollarSign,
+  Calendar,
+  TrendingUp,
   BookOpen,
-  Bot,
+  MapPin,
+  Layers,
+  Settings,
+  AudioWaveform,
   Command,
   Frame,
   GalleryVerticalEnd,
-  Map,
   PieChart,
-  Settings2,
-  SquareTerminal,
 } from "lucide-react"
 
 import { NavMain } from "@/components/nav-main"
@@ -51,28 +61,119 @@ const data = {
   ],
   navMain: [
     {
-      title: "Transfer",
-      url: "/",
-      icon: SquareTerminal,
-      isActive: true,
+      group: "Principal",
+      items: [
+        {
+          title: "Painel",
+          url: "/",
+          icon: LayoutGrid,
+          isActive: false,
+        },
+        {
+          title: "Atividade",
+          url: "#",
+          icon: Activity,
+          isActive: true,
+        },
+      ],
     },
     {
-      title: "Playground",
-      url: "#",
-      icon: Bot,
-      isActive: false,
+      group: "Serviços",
+      items: [
+        {
+          title: "Transfer",
+          url: "/transfer",
+          icon: Briefcase,
+          isActive: false,
+        },
+        {
+          title: "Combo",
+          url: "#",
+          icon: Layers,
+          isActive: false,
+        },
+        {
+          title: "Hospedagem",
+          url: "#",
+          icon: Home,
+          isActive: false,
+        },
+        {
+          title: "Ingresso",
+          url: "#",
+          icon: Briefcase,
+          isActive: false,
+        },
+        {
+          title: "Passeio",
+          url: "#",
+          icon: Plane,
+          isActive: false,
+        },
+        {
+          title: "Experiência",
+          url: "#",
+          icon: Eye,
+          isActive: false,
+        },
+        {
+          title: "Circuito",
+          url: "#",
+          icon: Radio,
+          isActive: false,
+        },
+      ],
     },
     {
-      title: "Models",
-      url: "#",
-      icon: BookOpen,
-      isActive: false,
+      group: "Comercial",
+      items: [
+        {
+          title: "Tarifário",
+          url: "#",
+          icon: DollarSign,
+          isActive: false,
+        },
+        {
+          title: "Disponibilidade",
+          url: "#",
+          icon: Calendar,
+          isActive: false,
+        },
+      ],
     },
     {
-      title: "Settings",
-      url: "#",
-      icon: Settings2,
-      isActive: false,
+      group: "Complementos",
+      items: [
+        {
+          title: "Slots",
+          url: "#",
+          icon: Zap,
+          isActive: false,
+        },
+        {
+          title: "Perímetros",
+          url: "#",
+          icon: MapPin,
+          isActive: false,
+        },
+        {
+          title: "Diretrizes",
+          url: "#",
+          icon: BookOpen,
+          isActive: false,
+        },
+      ],
+    },
+    {
+      group: "Organização",
+      items: [
+        {
+          title: "Configurações",
+          url: "#",
+          icon: Settings,
+          isActive: false,
+        },
+      ],
     },
   ],
   projects: [
@@ -102,7 +203,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={data.navMain} />
-        <NavProjects projects={data.projects} />
+        
       </SidebarContent>
       <SidebarFooter>
       </SidebarFooter>
