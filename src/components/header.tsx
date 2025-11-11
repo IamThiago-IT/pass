@@ -1,4 +1,4 @@
-import { Search, Moon, Grid3x3 } from "lucide-react";
+import { Search, Moon, Grid3x3, Globe, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
@@ -42,8 +42,10 @@ export function Header() {
             <Moon className="h-4 w-4" />
           </Button>
 
-          <Button variant="ghost" className="h-9 px-3 gap-1">
-            🇧🇷 Português
+          <Button variant="ghost" className="h-9 px-3 gap-1 text-sm">
+            <Globe className="h-4 w-4" />
+            Português
+            <ChevronDown className="h-4 w-4" />
           </Button>
 
           <Button variant="ghost" size="icon" className="h-9 w-9">

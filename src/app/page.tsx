@@ -71,8 +71,19 @@ export default function Home() {
   return (
     <>
       <Header />
-      <div className="px-4 md:px-8 py-4 md:py-8">
-        <h1 className="text-2xl md:text-3xl font-semibold mb-6">Transfer</h1>
+      
+      {/* Sub Navigation */}
+      <div className="border-b bg-background">
+        <div className="px-8">
+          <nav className="flex items-center">
+            <button className="h-12 px-4 text-sm font-medium border-b-2 border-primary -mb-px">
+              Transfer
+            </button>
+          </nav>
+        </div>
+      </div>
+
+      <div className="px-8 py-6">
 
         {/* Toolbar */}
         <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between mb-6">
@@ -113,7 +124,7 @@ export default function Home() {
       </div>
 
       {/* Table */}
-      <div className="mb-6 px-4 md:px-8">
+      <div className="mb-6 px-8">
         <div className="overflow-x-auto">
           <Table>
             <TableHeader>
@@ -147,7 +158,7 @@ export default function Home() {
       </div>
 
       {/* Footer */}
-      <div className="px-4 md:px-8 pb-4 md:pb-8">
+      <div className="px-8 pb-8">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <p className="text-muted-foreground text-sm">0 de 30 linha(s) selecionadas.</p>
 
