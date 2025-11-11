@@ -21,7 +21,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           <SidebarProvider>
             <AppSidebar />
             <main className="w-full">
-              <SidebarTrigger />
+              <div className="px-6 pt-4">
+                <SidebarTrigger />
+              </div>
               <ThemeProvider
                 attribute="class"
                 defaultTheme="system"

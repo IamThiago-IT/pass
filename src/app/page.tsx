@@ -72,19 +72,6 @@ export default function Home() {
   return (
     <>
       <Header />
-      
-      {/* Sub Navigation */}
-      <div className="border-b bg-background">
-        <div className="px-8">
-          <nav className="flex h-11 items-center gap-3 text-sm text-muted-foreground">
-            <div className="flex items-center gap-3">
-              <PanelsTopLeft className="h-4 w-4" />
-              <span className="h-4 w-px bg-border" />
-              <span className="font-medium text-foreground">Transfer</span>
-            </div>
-          </nav>
-        </div>
-      </div>
 
       <div className="px-8 py-6">
 

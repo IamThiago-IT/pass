@@ -1,9 +1,18 @@
-import { Search, Moon, Grid3x3, Globe, ChevronDown } from "lucide-react";
+"use client";
+
+import { Search, Moon, Sun, Grid3x3, Globe, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { useTheme } from "next-themes";
 
 export function Header() {
+  const { resolvedTheme, setTheme } = useTheme();
+
+  const toggleTheme = () => {
+    setTheme(resolvedTheme === "dark" ? "light" : "dark");
+  };
+
   return (
     <header className="border-b bg-background">
       <div className="flex items-center justify-between px-4 h-14">
@@ -23,8 +32,18 @@ export function Header() {
             </kbd>
           </div>
 
-          <Button variant="ghost" size="icon" className="h-9 w-9">
-            <Moon className="h-4 w-4" />
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-9 w-9"
+            onClick={toggleTheme}
+            aria-label="Alternar tema"
+          >
+            {resolvedTheme === "dark" ? (
+              <Sun className="h-4 w-4" />
+            ) : (
+              <Moon className="h-4 w-4" />
+            )}
           </Button>
 
           <Button variant="ghost" className="h-9 px-3 gap-1 text-sm">
