@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
+import { Header } from "@/components/header";
 import {
   Table,
   TableBody,
@@ -68,12 +69,13 @@ const transfers = [
 
 export default function Home() {
   return (
-    <div className="min-h-screen p-4 md:p-8">
-      <div className="max-w-7xl mx-auto space-y-8">
-        <h1 className="text-2xl md:text-3xl font-semibold">Transfer</h1>
+    <>
+      <Header />
+      <div className="px-4 md:px-8 py-4 md:py-8">
+        <h1 className="text-2xl md:text-3xl font-semibold mb-6">Transfer</h1>
 
         {/* Toolbar */}
-        <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+        <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between mb-6">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
             <div className="relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
@@ -108,42 +110,44 @@ export default function Home() {
             </Button>
           </div>
         </div>
+      </div>
 
-        {/* Table */}
-        <div className="rounded-lg border overflow-hidden">
-          <div className="overflow-x-auto">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead className="w-16">ID</TableHead>
-                  <TableHead className="min-w-[200px]">Título</TableHead>
-                  <TableHead className="min-w-[120px]">Modo</TableHead>
-                  <TableHead className="min-w-[100px]">Status</TableHead>
-                  <TableHead className="min-w-[120px]">Criado em</TableHead>
-                  <TableHead className="min-w-[140px]">Última Alteração</TableHead>
+      {/* Table */}
+      <div className="mb-6 px-4 md:px-8">
+        <div className="overflow-x-auto">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead className="w-16">ID</TableHead>
+                <TableHead className="min-w-[200px]">Título</TableHead>
+                <TableHead className="min-w-[120px]">Modo</TableHead>
+                <TableHead className="min-w-[100px]">Status</TableHead>
+                <TableHead className="min-w-[120px]">Criado em</TableHead>
+                <TableHead className="min-w-[140px]">Última Alteração</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {transfers.map((transfer) => (
+                <TableRow key={transfer.id}>
+                  <TableCell className="font-medium">{transfer.id}</TableCell>
+                  <TableCell className="font-medium">{transfer.title}</TableCell>
+                  <TableCell>{transfer.mode}</TableCell>
+                  <TableCell>
+                    <Badge className="bg-green-600 hover:bg-green-700 text-white whitespace-nowrap">
+                      {transfer.status}
+                    </Badge>
+                  </TableCell>
+                  <TableCell>{transfer.createdAt}</TableCell>
+                  <TableCell>{transfer.lastUpdate}</TableCell>
                 </TableRow>
-              </TableHeader>
-              <TableBody>
-                {transfers.map((transfer) => (
-                  <TableRow key={transfer.id}>
-                    <TableCell className="font-medium">{transfer.id}</TableCell>
-                    <TableCell className="font-medium">{transfer.title}</TableCell>
-                    <TableCell>{transfer.mode}</TableCell>
-                    <TableCell>
-                      <Badge className="bg-green-600 hover:bg-green-700 text-white whitespace-nowrap">
-                        {transfer.status}
-                      </Badge>
-                    </TableCell>
-                    <TableCell>{transfer.createdAt}</TableCell>
-                    <TableCell>{transfer.lastUpdate}</TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </div>
+              ))}
+            </TableBody>
+          </Table>
         </div>
+      </div>
 
-        {/* Footer */}
+      {/* Footer */}
+      <div className="px-4 md:px-8 pb-4 md:pb-8">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <p className="text-muted-foreground text-sm">0 de 30 linha(s) selecionadas.</p>
 
@@ -166,6 +170,6 @@ export default function Home() {
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }

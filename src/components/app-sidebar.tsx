@@ -2,26 +2,25 @@
 
 import * as React from "react"
 import {
-  Zap,
-  LayoutGrid,
   Activity,
-  Briefcase,
-  Home,
-  Plane,
-  Eye,
-  Radio,
-  DollarSign,
-  Calendar,
-  TrendingUp,
-  BookOpen,
-  MapPin,
-  Layers,
-  Settings,
   AudioWaveform,
+  BookOpen,
+  Briefcase,
+  Calendar,
   Command,
+  DollarSign,
+  Eye,
   Frame,
   GalleryVerticalEnd,
+  Home,
+  LayoutGrid,
+  Layers,
+  MapPin,
   PieChart,
+  Plane,
+  Radio,
+  Settings,
+  Zap,
 } from "lucide-react"
 
 import { NavMain } from "@/components/nav-main"
@@ -43,155 +42,56 @@ const data = {
     email: "m@example.com",
   },
   teams: [
-    {
-      name: "Acme Inc",
-      logo: GalleryVerticalEnd,
-      plan: "Enterprise",
-    },
-    {
-      name: "Acme Corp.",
-      logo: AudioWaveform,
-      plan: "Startup",
-    },
-    {
-      name: "Evil Corp.",
-      logo: Command,
-      plan: "Free",
-    },
+    { name: "Pass", logo: GalleryVerticalEnd },
+    { name: "Allinsys", logo: AudioWaveform },
+    { name: "Google", logo: Command },
   ],
   navMain: [
     {
       group: "Principal",
       items: [
-        {
-          title: "Painel",
-          url: "/",
-          icon: LayoutGrid,
-          isActive: false,
-        },
-        {
-          title: "Atividade",
-          url: "#",
-          icon: Activity,
-          isActive: true,
-        },
+        { title: "Painel", url: "/", icon: LayoutGrid, isActive: false },
+        { title: "Atividade", url: "#", icon: Activity, isActive: true },
       ],
     },
     {
       group: "Serviços",
       items: [
-        {
-          title: "Transfer",
-          url: "/transfer",
-          icon: Briefcase,
-          isActive: false,
-        },
-        {
-          title: "Combo",
-          url: "#",
-          icon: Layers,
-          isActive: false,
-        },
-        {
-          title: "Hospedagem",
-          url: "#",
-          icon: Home,
-          isActive: false,
-        },
-        {
-          title: "Ingresso",
-          url: "#",
-          icon: Briefcase,
-          isActive: false,
-        },
-        {
-          title: "Passeio",
-          url: "#",
-          icon: Plane,
-          isActive: false,
-        },
-        {
-          title: "Experiência",
-          url: "#",
-          icon: Eye,
-          isActive: false,
-        },
-        {
-          title: "Circuito",
-          url: "#",
-          icon: Radio,
-          isActive: false,
-        },
+        { title: "Transfer", url: "/transfer", icon: Briefcase, isActive: false },
+        { title: "Combo", url: "#", icon: Layers, isActive: false },
+        { title: "Hospedagem", url: "#", icon: Home, isActive: false },
+        { title: "Ingresso", url: "#", icon: Briefcase, isActive: false },
+        { title: "Passeio", url: "#", icon: Plane, isActive: false },
+        { title: "Experiência", url: "#", icon: Eye, isActive: false },
+        { title: "Circuito", url: "#", icon: Radio, isActive: false },
       ],
     },
     {
       group: "Comercial",
       items: [
-        {
-          title: "Tarifário",
-          url: "#",
-          icon: DollarSign,
-          isActive: false,
-        },
-        {
-          title: "Disponibilidade",
-          url: "#",
-          icon: Calendar,
-          isActive: false,
-        },
+        { title: "Tarifário", url: "#", icon: DollarSign, isActive: false },
+        { title: "Disponibilidade", url: "#", icon: Calendar, isActive: false },
       ],
     },
     {
       group: "Complementos",
       items: [
-        {
-          title: "Slots",
-          url: "#",
-          icon: Zap,
-          isActive: false,
-        },
-        {
-          title: "Perímetros",
-          url: "#",
-          icon: MapPin,
-          isActive: false,
-        },
-        {
-          title: "Diretrizes",
-          url: "#",
-          icon: BookOpen,
-          isActive: false,
-        },
+        { title: "Slots", url: "#", icon: Zap, isActive: false },
+        { title: "Perímetros", url: "#", icon: MapPin, isActive: false },
+        { title: "Diretrizes", url: "#", icon: BookOpen, isActive: false },
       ],
     },
     {
       group: "Organização",
       items: [
-        {
-          title: "Configurações",
-          url: "#",
-          icon: Settings,
-          isActive: false,
-        },
+        { title: "Configurações", url: "#", icon: Settings, isActive: false },
       ],
     },
   ],
   projects: [
-    {
-      name: "Design Engineering",
-      url: "#",
-      icon: Frame,
-    },
-    {
-      name: "Sales & Marketing",
-      url: "#",
-      icon: PieChart,
-    },
-    {
-      name: "Travel",
-      url: "#",
-      icon: Map,
-    },
+    { name: "Design Engineering", url: "#", icon: Frame },
+    { name: "Sales & Marketing", url: "#", icon: PieChart },
+    { name: "Travel", url: "#", icon: MapPin },
   ],
 }
 
@@ -203,10 +103,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={data.navMain} />
-        
       </SidebarContent>
-      <SidebarFooter>
-      </SidebarFooter>
+      <SidebarFooter />
       <SidebarRail />
     </Sidebar>
   )
