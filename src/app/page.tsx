@@ -18,6 +18,7 @@ import {
   Plus,
   ChevronLeft,
   ChevronRight,
+  PanelsTopLeft,
 } from "lucide-react";
 
 export const metadata: Metadata = {
@@ -75,10 +76,12 @@ export default function Home() {
       {/* Sub Navigation */}
       <div className="border-b bg-background">
         <div className="px-8">
-          <nav className="flex items-center">
-            <button className="h-12 px-4 text-sm font-medium border-b-2 border-primary -mb-px">
-              Transfer
-            </button>
+          <nav className="flex h-11 items-center gap-3 text-sm text-muted-foreground">
+            <div className="flex items-center gap-3">
+              <PanelsTopLeft className="h-4 w-4" />
+              <span className="h-4 w-px bg-border" />
+              <span className="font-medium text-foreground">Transfer</span>
+            </div>
           </nav>
         </div>
       </div>

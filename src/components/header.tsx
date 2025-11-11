@@ -7,23 +7,8 @@ export function Header() {
   return (
     <header className="border-b bg-background">
       <div className="flex items-center justify-between px-4 h-14">
-        {/* Left section - Logo and Navigation */}
-        <div className="flex items-center gap-6">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-blue-600 rounded-md flex items-center justify-center">
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                <rect width="16" height="16" rx="2" fill="white" />
-              </svg>
-            </div>
-            <span className="font-semibold">Pass</span>
-          </div>
-
-          <nav className="flex items-center gap-1">
-            <Button variant="ghost" className="h-9 px-3">
-              Transfer
-            </Button>
-          </nav>
-        </div>
+        {/* Left section intentionally left empty to match design */}
+        <div className="flex items-center gap-6" />
 
         {/* Right section - Search, Controls, User */}
         <div className="flex items-center gap-3">
