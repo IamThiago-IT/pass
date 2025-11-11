@@ -1,4 +1,4 @@
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
 import { ThemeProvider } from "@/components/theme-provider";
 
@@ -21,9 +21,6 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           <SidebarProvider>
             <AppSidebar />
             <main className="w-full">
-              <div className="px-6 pt-4">
-                <SidebarTrigger />
-              </div>
               <ThemeProvider
                 attribute="class"
                 defaultTheme="system"

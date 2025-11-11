@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { useTheme } from "next-themes";
+import { SidebarTrigger } from "@/components/ui/sidebar";
 
 export function Header() {
   const { resolvedTheme, setTheme } = useTheme();
@@ -15,9 +16,10 @@ export function Header() {
 
   return (
     <header className="border-b bg-background">
-      <div className="flex items-center justify-between px-4 h-14">
-        {/* Left section intentionally left empty to match design */}
-        <div className="flex items-center gap-6" />
+      <div className="flex items-center justify-between px-8 h-14">
+        <div className="flex items-center gap-3">
+          <SidebarTrigger className="h-9 w-9 rounded-md border border-border/60" />
+        </div>
 
         {/* Right section - Search, Controls, User */}
         <div className="flex items-center gap-3">
