@@ -44,6 +44,14 @@ import {
   PanelsTopLeft,
 } from "lucide-react";
 
+type SortField = "id" | "title" | "mode" | "status" | "createdAt" | "lastUpdate";
+type SortDirection = "asc" | "desc" | null;
+
+interface SortState {
+  field: SortField | null;
+  direction: SortDirection;
+}
+
 const transfers = [
   {
     id: 17,
@@ -130,6 +138,9 @@ const transfers = [
 export default function Home() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [selectedRows, setSelectedRows] = useState<Set<number>>(new Set());
+  const [sort, setSort] = useState<SortState>({ field: null, direction: null });
+  const [sortedTransfers, setSortedTransfers] = useState(transfers);
   const refreshTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
@@ -139,6 +150,71 @@ export default function Home() {
       }
     };
   }, []);
+
+  useEffect(() => {
+    let sorted = [...transfers];
+
+    if (sort.field && sort.direction) {
+      sorted.sort((a, b) => {
+        const aValue = a[sort.field as keyof typeof a];
+        const bValue = b[sort.field as keyof typeof b];
+
+        if (typeof aValue === "string" && typeof bValue === "string") {
+          const comparison = aValue.localeCompare(bValue);
+          return sort.direction === "asc" ? comparison : -comparison;
+        }
+
+        if (typeof aValue === "number" && typeof bValue === "number") {
+          return sort.direction === "asc" ? aValue - bValue : bValue - aValue;
+        }
+
+        return 0;
+      });
+    }
+
+    setSortedTransfers(sorted);
+  }, [sort]);
+
+  const toggleSort = (field: SortField) => {
+    if (sort.field === field) {
+      if (sort.direction === "asc") {
+        setSort({ field, direction: "desc" });
+      } else {
+        setSort({ field: null, direction: null });
+      }
+    } else {
+      setSort({ field, direction: "asc" });
+    }
+  };
+
+  const toggleSelectAll = () => {
+    if (selectedRows.size === sortedTransfers.length) {
+      setSelectedRows(new Set());
+    } else {
+      setSelectedRows(new Set(sortedTransfers.map((t) => t.id)));
+    }
+  };
+
+  const toggleSelectRow = (id: number) => {
+    const newSelected = new Set(selectedRows);
+    if (newSelected.has(id)) {
+      newSelected.delete(id);
+    } else {
+      newSelected.add(id);
+    }
+    setSelectedRows(newSelected);
+  };
+
+  const getSortIcon = (field: SortField) => {
+    if (sort.field !== field) {
+      return <ArrowUpDown className="h-3.5 w-3.5" />;
+    }
+    return sort.direction === "asc" ? (
+      <ArrowUp className="h-3.5 w-3.5" />
+    ) : (
+      <ArrowDown className="h-3.5 w-3.5" />
+    );
+  };
 
   const handleRefresh = () => {
     if (refreshTimeoutRef.current) {
@@ -291,54 +367,61 @@ export default function Home() {
                       type="checkbox"
                       aria-label="Selecionar todas as linhas"
                       className="h-4 w-4 rounded border-border/60 bg-transparent accent-emerald-500"
+                      checked={
+                        sortedTransfers.length > 0 &&
+                        selectedRows.size === sortedTransfers.length
+                      }
+                      onChange={toggleSelectAll}
                     />
                   </TableHead>
-                  <TableHead className="text-muted-foreground">
+                  <TableHead className="text-muted-foreground cursor-pointer hover:bg-muted/50" onClick={() => toggleSort("id")}>
                     <span className="flex items-center gap-2 text-xs font-medium uppercase tracking-wide">
                       ID
-                      <ArrowUpDown className="h-3.5 w-3.5" />
+                      {getSortIcon("id")}
                     </span>
                   </TableHead>
-                  <TableHead className="text-muted-foreground">
+                  <TableHead className="text-muted-foreground cursor-pointer hover:bg-muted/50" onClick={() => toggleSort("title")}>
                     <span className="flex items-center gap-2 text-xs font-medium uppercase tracking-wide">
                       Título
-                      <ArrowUpDown className="h-3.5 w-3.5" />
+                      {getSortIcon("title")}
                     </span>
                   </TableHead>
-                  <TableHead className="text-muted-foreground">
+                  <TableHead className="text-muted-foreground cursor-pointer hover:bg-muted/50" onClick={() => toggleSort("mode")}>
                     <span className="flex items-center gap-2 text-xs font-medium uppercase tracking-wide">
                       Modo
-                      <ArrowUpDown className="h-3.5 w-3.5" />
+                      {getSortIcon("mode")}
                     </span>
                   </TableHead>
-                  <TableHead className="text-muted-foreground">
+                  <TableHead className="text-muted-foreground cursor-pointer hover:bg-muted/50" onClick={() => toggleSort("status")}>
                     <span className="flex items-center gap-2 text-xs font-medium uppercase tracking-wide">
                       Status
-                      <ArrowUpDown className="h-3.5 w-3.5" />
+                      {getSortIcon("status")}
                     </span>
                   </TableHead>
-                  <TableHead className="text-muted-foreground">
+                  <TableHead className="text-muted-foreground cursor-pointer hover:bg-muted/50" onClick={() => toggleSort("createdAt")}>
                     <span className="flex items-center gap-2 text-xs font-medium uppercase tracking-wide">
                       Criado em
-                      <ArrowUpDown className="h-3.5 w-3.5" />
+                      {getSortIcon("createdAt")}
                     </span>
                   </TableHead>
-                  <TableHead className="text-muted-foreground">
+                  <TableHead className="text-muted-foreground cursor-pointer hover:bg-muted/50" onClick={() => toggleSort("lastUpdate")}>
                     <span className="flex items-center gap-2 text-xs font-medium uppercase tracking-wide">
                       Última alteração
-                      <ArrowUpDown className="h-3.5 w-3.5" />
+                      {getSortIcon("lastUpdate")}
                     </span>
                   </TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {transfers.map((transfer) => (
+                {sortedTransfers.map((transfer) => (
                   <TableRow key={transfer.id} className="border-border/60">
                     <TableCell className="w-10">
                       <input
                         type="checkbox"
                         aria-label={`Selecionar transferência ${transfer.id}`}
                         className="h-4 w-4 rounded border-border/60 bg-transparent accent-emerald-500"
+                        checked={selectedRows.has(transfer.id)}
+                        onChange={() => toggleSelectRow(transfer.id)}
                       />
                     </TableCell>
                     <TableCell className="font-medium text-sm text-foreground/90">
@@ -371,7 +454,7 @@ export default function Home() {
           {/* Footer */}
           <div className="flex flex-col gap-4 border-t border-border/60 px-6 py-4 md:flex-row md:items-center md:justify-between">
             <p className="text-sm text-muted-foreground">
-              0 de {transfers.length} linha(s) selecionadas.
+              {selectedRows.size} de {sortedTransfers.length} linha(s) selecionadas.
             </p>
 
             <div className="flex flex-wrap items-center gap-3">
