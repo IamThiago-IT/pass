@@ -1,10 +1,26 @@
 "use client";
 
-import type { Metadata } from "next";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { Header } from "@/components/header";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { cn } from "@/lib/utils";
 import {
   Table,
   TableBody,
@@ -112,6 +128,36 @@ const transfers = [
 ];
 
 export default function Home() {
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const refreshTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (refreshTimeoutRef.current) {
+        clearTimeout(refreshTimeoutRef.current);
+      }
+    };
+  }, []);
+
+  const handleRefresh = () => {
+    if (refreshTimeoutRef.current) {
+      clearTimeout(refreshTimeoutRef.current);
+    }
+
+    setIsRefreshing(true);
+
+    refreshTimeoutRef.current = setTimeout(() => {
+      setIsRefreshing(false);
+      refreshTimeoutRef.current = null;
+    }, 1200);
+  };
+
+  const handleAddSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setIsDialogOpen(false);
+  };
+
   return (
     <>
       <Header />
@@ -123,8 +169,9 @@ export default function Home() {
             <div className="flex flex-wrap items-center gap-3">
               <Button
                 variant="outline"
-                size="icon"
-                className="h-10 w-10 rounded-lg border-border/60 bg-muted/30"
+                size="icon-lg"
+                className="rounded-lg border-border/60 bg-muted/30"
+                aria-label="Alternar visualizações"
               >
                 <PanelsTopLeft className="h-5 w-5" />
               </Button>
@@ -140,7 +187,8 @@ export default function Home() {
 
               <Button
                 variant="outline"
-                className="flex items-center gap-2 rounded-lg border-border/60 bg-muted/30 px-4 text-sm"
+                size="lg"
+                className="rounded-lg border-border/60 bg-muted/30 text-sm"
               >
                 <Filter className="h-4 w-4" />
                 Modo
@@ -148,39 +196,88 @@ export default function Home() {
 
               <Button
                 variant="outline"
-                className="flex items-center gap-2 rounded-lg border-border/60 bg-muted/30 px-4 text-sm"
+                size="lg"
+                className="rounded-lg border-border/60 bg-muted/30 text-sm"
               >
                 <Filter className="h-4 w-4" />
                 Status
               </Button>
             </div>
 
-            <div className="flex flex-wrap items-center gap-2">
+            <div className="flex flex-wrap items-center gap-3">
               <Button
                 variant="outline"
-                className="flex items-center gap-2 rounded-lg border-border/60 bg-muted/30 px-4 text-sm"
+                size="lg"
+                className="rounded-lg border-border/60 bg-muted/30 text-sm"
+                onClick={handleRefresh}
+                disabled={isRefreshing}
               >
-                <RefreshCcw className="h-4 w-4" />
-                Atualizar
+                <RefreshCcw
+                  className={cn("h-4 w-4", isRefreshing && "animate-spin")}
+                  aria-hidden="true"
+                />
+                {isRefreshing ? "Atualizando" : "Atualizar"}
               </Button>
-              <Button
-                variant="outline"
-                className="flex items-center gap-2 rounded-lg border-border/60 bg-muted/30 px-4 text-sm"
-              >
-                <Download className="h-4 w-4" />
-                Export
-              </Button>
-              <Button
-                variant="outline"
-                size="icon"
-                className="h-10 w-10 rounded-lg border-border/60 bg-muted/30"
-              >
-                <ChevronDown className="h-4 w-4" />
-              </Button>
-              <Button className="flex items-center gap-2 rounded-lg px-4 text-sm">
-                <Plus className="h-4 w-4" />
-                Adicionar
-              </Button>
+
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    variant="outline"
+                    size="lg"
+                    className="rounded-lg border-border/60 bg-muted/30 text-sm"
+                  >
+                    <Download className="h-4 w-4" />
+                    Exportar
+                    <ChevronDown className="h-4 w-4 text-muted-foreground" aria-hidden="true" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-48">
+                  <DropdownMenuItem>Exportar CSV</DropdownMenuItem>
+                  <DropdownMenuItem>Exportar Excel</DropdownMenuItem>
+                  <DropdownMenuItem>Exportar PDF</DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+
+              <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+                <DialogTrigger asChild>
+                  <Button size="lg" className="rounded-lg px-4 text-sm">
+                    <Plus className="h-4 w-4" />
+                    Adicionar
+                  </Button>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Adicionar transferência</DialogTitle>
+                    <DialogDescription>
+                      Preencha os dados básicos para cadastrar uma nova transferência.
+                    </DialogDescription>
+                  </DialogHeader>
+                  <form className="space-y-4" onSubmit={handleAddSubmit}>
+                    <div className="space-y-2">
+                      <Label htmlFor="transfer-title">Título</Label>
+                      <Input
+                        id="transfer-title"
+                        placeholder="Ex.: Transfer Privativo do Paulo"
+                        required
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="transfer-mode">Modo</Label>
+                      <Input id="transfer-mode" placeholder="Compartilhado" />
+                    </div>
+                    <DialogFooter>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        onClick={() => setIsDialogOpen(false)}
+                      >
+                        Cancelar
+                      </Button>
+                      <Button type="submit">Salvar</Button>
+                    </DialogFooter>
+                  </form>
+                </DialogContent>
+              </Dialog>
             </div>
           </div>
 
@@ -280,7 +377,8 @@ export default function Home() {
             <div className="flex flex-wrap items-center gap-3">
               <Button
                 variant="outline"
-                className="flex items-center gap-2 rounded-lg border-border/60 bg-muted/30 px-3 text-sm"
+                size="lg"
+                className="rounded-lg border-border/60 bg-muted/30 px-3 text-sm"
               >
                 10 / página
                 <ChevronDown className="h-4 w-4" />
@@ -289,22 +387,22 @@ export default function Home() {
               <div className="flex items-center gap-2">
                 <Button
                   variant="outline"
-                  size="icon"
-                  className="h-9 w-9 rounded-lg border-border/60 bg-muted/30 text-xs font-semibold"
+                  size="icon-lg"
+                  className="rounded-lg border-border/60 bg-muted/30 text-xs font-semibold"
                 >
                   K
                 </Button>
                 <Button
                   variant="outline"
-                  size="icon"
-                  className="h-9 w-9 rounded-lg border-border/60 bg-muted/30"
+                  size="icon-lg"
+                  className="rounded-lg border-border/60 bg-muted/30"
                 >
                   <ChevronLeft className="h-4 w-4" />
                 </Button>
                 <Button
                   variant="outline"
-                  size="icon"
-                  className="h-9 w-9 rounded-lg border-border/60 bg-muted/30"
+                  size="icon-lg"
+                  className="rounded-lg border-border/60 bg-muted/30"
                 >
                   <ChevronRight className="h-4 w-4" />
                 </Button>
