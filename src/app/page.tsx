@@ -142,6 +142,8 @@ export default function Home() {
   const [sort, setSort] = useState<SortState>({ field: null, direction: null });
   const [sortedTransfers, setSortedTransfers] = useState(transfers);
   const [searchQuery, setSearchQuery] = useState("");
+  const [selectedModes, setSelectedModes] = useState<Set<string>>(new Set());
+  const [selectedStatuses, setSelectedStatuses] = useState<Set<string>>(new Set());
   const refreshTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
@@ -168,6 +170,16 @@ export default function Home() {
       });
     }
 
+    // Aplica filtro de modo
+    if (selectedModes.size > 0) {
+      sorted = sorted.filter((transfer) => selectedModes.has(transfer.mode));
+    }
+
+    // Aplica filtro de status
+    if (selectedStatuses.size > 0) {
+      sorted = sorted.filter((transfer) => selectedStatuses.has(transfer.status));
+    }
+
     // Aplica ordenação
     if (sort.field && sort.direction) {
       sorted.sort((a, b) => {
@@ -188,7 +200,7 @@ export default function Home() {
     }
 
     setSortedTransfers(sorted);
-  }, [sort, searchQuery]);
+  }, [sort, searchQuery, selectedModes, selectedStatuses]);
 
   const toggleSort = (field: SortField) => {
     if (sort.field === field) {
@@ -229,6 +241,42 @@ export default function Home() {
     ) : (
       <ArrowDown className="h-3.5 w-3.5" />
     );
+  };
+
+  const getModeOptions = () => {
+    const modes = new Map<string, number>();
+    transfers.forEach((transfer) => {
+      modes.set(transfer.mode, (modes.get(transfer.mode) || 0) + 1);
+    });
+    return Array.from(modes.entries());
+  };
+
+  const getStatusOptions = () => {
+    const statuses = new Map<string, number>();
+    transfers.forEach((transfer) => {
+      statuses.set(transfer.status, (statuses.get(transfer.status) || 0) + 1);
+    });
+    return Array.from(statuses.entries());
+  };
+
+  const toggleModeFilter = (mode: string) => {
+    const newModes = new Set(selectedModes);
+    if (newModes.has(mode)) {
+      newModes.delete(mode);
+    } else {
+      newModes.add(mode);
+    }
+    setSelectedModes(newModes);
+  };
+
+  const toggleStatusFilter = (status: string) => {
+    const newStatuses = new Set(selectedStatuses);
+    if (newStatuses.has(status)) {
+      newStatuses.delete(status);
+    } else {
+      newStatuses.add(status);
+    }
+    setSelectedStatuses(newStatuses);
   };
 
   const handleRefresh = () => {
@@ -277,23 +325,65 @@ export default function Home() {
                 />
               </div>
 
-              <Button
-                variant="outline"
-                size="lg"
-                className="rounded-lg border-border/60 bg-muted/30 text-sm"
-              >
-                <Filter className="h-4 w-4" />
-                Modo
-              </Button>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    variant="outline"
+                    size="lg"
+                    className="rounded-lg border-border/60 bg-muted/30 text-sm"
+                  >
+                    <Filter className="h-4 w-4" />
+                    Modo
+                    <ChevronDown className="h-4 w-4 text-muted-foreground" aria-hidden="true" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-48">
+                  <div className="space-y-2 p-3">
+                    {getModeOptions().map(([mode, count]) => (
+                      <label key={mode} className="flex items-center gap-2 cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={selectedModes.has(mode)}
+                          onChange={() => toggleModeFilter(mode)}
+                          className="h-4 w-4 rounded border-border/60 bg-transparent accent-emerald-500"
+                        />
+                        <span className="text-sm flex-1">{mode}</span>
+                        <span className="text-xs text-muted-foreground">{count}</span>
+                      </label>
+                    ))}
+                  </div>
+                </DropdownMenuContent>
+              </DropdownMenu>
 
-              <Button
-                variant="outline"
-                size="lg"
-                className="rounded-lg border-border/60 bg-muted/30 text-sm"
-              >
-                <Filter className="h-4 w-4" />
-                Status
-              </Button>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    variant="outline"
+                    size="lg"
+                    className="rounded-lg border-border/60 bg-muted/30 text-sm"
+                  >
+                    <Filter className="h-4 w-4" />
+                    Status
+                    <ChevronDown className="h-4 w-4 text-muted-foreground" aria-hidden="true" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-48">
+                  <div className="space-y-2 p-3">
+                    {getStatusOptions().map(([status, count]) => (
+                      <label key={status} className="flex items-center gap-2 cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={selectedStatuses.has(status)}
+                          onChange={() => toggleStatusFilter(status)}
+                          className="h-4 w-4 rounded border-border/60 bg-transparent accent-emerald-500"
+                        />
+                        <span className="text-sm flex-1">{status}</span>
+                        <span className="text-xs text-muted-foreground">{count}</span>
+                      </label>
+                    ))}
+                  </div>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
 
             <div className="flex flex-wrap items-center gap-3">
