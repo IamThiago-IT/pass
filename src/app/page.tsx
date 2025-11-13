@@ -141,6 +141,7 @@ export default function Home() {
   const [selectedRows, setSelectedRows] = useState<Set<number>>(new Set());
   const [sort, setSort] = useState<SortState>({ field: null, direction: null });
   const [sortedTransfers, setSortedTransfers] = useState(transfers);
+  const [searchQuery, setSearchQuery] = useState("");
   const refreshTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
@@ -154,6 +155,20 @@ export default function Home() {
   useEffect(() => {
     let sorted = [...transfers];
 
+    // Aplica filtro de busca
+    if (searchQuery.trim()) {
+      sorted = sorted.filter((transfer) => {
+        const query = searchQuery.toLowerCase();
+        return (
+          transfer.title.toLowerCase().includes(query) ||
+          transfer.mode.toLowerCase().includes(query) ||
+          transfer.status.toLowerCase().includes(query) ||
+          transfer.id.toString().includes(query)
+        );
+      });
+    }
+
+    // Aplica ordenação
     if (sort.field && sort.direction) {
       sorted.sort((a, b) => {
         const aValue = a[sort.field as keyof typeof a];
@@ -173,7 +188,7 @@ export default function Home() {
     }
 
     setSortedTransfers(sorted);
-  }, [sort]);
+  }, [sort, searchQuery]);
 
   const toggleSort = (field: SortField) => {
     if (sort.field === field) {
@@ -257,8 +272,9 @@ export default function Home() {
                 <Input
                   placeholder="Buscar..."
                   className="h-10 w-64 rounded-lg border border-border/60 bg-background/40 pl-10 text-sm"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
                 />
-                <kbd className="pointer-events-none absolute right-3 top-1/2 inline-flex h-5 -translate-y-1/2 select-none items-center gap-1 rounded border border-border/60 bg-muted/40 px-1.5 font-mono text-[10px] font-medium text-muted-foreground">CTRL+K</kbd>
               </div>
 
               <Button
