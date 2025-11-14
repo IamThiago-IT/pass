@@ -21,6 +21,7 @@ import {
   Radio,
   Settings,
   Zap,
+  Building2
 } from "lucide-react"
 
 import { NavMain } from "@/components/nav-main"
@@ -42,9 +43,9 @@ const data = {
     email: "m@example.com",
   },
   teams: [
-    { name: "Pass", logo: GalleryVerticalEnd },
-    { name: "Allinsys", logo: AudioWaveform },
-    { name: "Google", logo: Command },
+    { name: "Pass", logo: Building2 },
+    { name: "Allinsys", logo: Building2 },
+    { name: "Google", logo: Building2 },
   ],
   navMain: [
     {
