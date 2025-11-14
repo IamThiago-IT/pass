@@ -42,6 +42,7 @@ import {
   ArrowUpDown,
   RefreshCcw,
   PanelsTopLeft,
+  Bot
 } from "lucide-react";
 
 type SortField = "id" | "title" | "mode" | "status" | "createdAt" | "lastUpdate";
@@ -312,7 +313,7 @@ export default function Home() {
                 className="rounded-lg border-border/60 bg-muted/30"
                 aria-label="Alternar visualizações"
               >
-                <PanelsTopLeft className="h-5 w-5" />
+                <Bot className="h-5 w-5" />
               </Button>
 
               <div className="relative">
