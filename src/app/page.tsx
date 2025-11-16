@@ -2,6 +2,7 @@
 
 import { useMemo, useState, type FormEvent } from "react";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Header } from "@/components/header";
@@ -42,12 +43,19 @@ import {
   ArrowUpDown,
   RefreshCcw,
   PanelsTopLeft,
-  Bot
+  Bot,
+  X
 } from "lucide-react";
 
 import { useRefresh } from "@/hooks/useRefresh";
 import { useRowSelection } from "@/hooks/useRowSelection";
 import { useTransferTable, type SortField } from "@/hooks/useTransferTable";
+
+const transportModes = ["Compartilhado", "Privado", "Executivo"];
+const slotTypes = ["Turno", "Período", "Evento"];
+const tariffTypes = ["Faixa Etária", "Valor Fixo", "Por Passageiro"];
+const tagItems = ["Região dos Lagos", "Rio x Rio"];
+const optionItems = ["Confirmação Imediata", "Utilização somente no dia"];
 
 export default function Home() {
   const {
@@ -225,25 +233,129 @@ export default function Home() {
                 </DialogTrigger>
                 <DialogContent>
                   <DialogHeader>
-                    <DialogTitle>Adicionar transferência</DialogTitle>
+                    <DialogTitle>Transfer Privativo do Paulo</DialogTitle>
                     <DialogDescription>
-                      Preencha os dados básicos para cadastrar uma nova transferência.
+                      Preencha os campos abaixo para cadastrar um novo transfer.
                     </DialogDescription>
                   </DialogHeader>
-                  <form className="space-y-4" onSubmit={handleAddSubmit}>
+                  <form className="space-y-6" onSubmit={handleAddSubmit}>
                     <div className="space-y-2">
                       <Label htmlFor="transfer-title">Título</Label>
                       <Input
                         id="transfer-title"
-                        placeholder="Ex.: Transfer Privativo do Paulo"
+                        placeholder="Transfer Privativo do Paulo"
                         required
                       />
                     </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="transfer-mode">Modo</Label>
-                      <Input id="transfer-mode" placeholder="Compartilhado" />
+
+                    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+                      <div className="space-y-2">
+                        <Label htmlFor="transport-type">Tipo de Transporte</Label>
+                        <div className="relative">
+                          <select
+                            id="transport-type"
+                            className="h-10 w-full appearance-none rounded-lg border border-border/60 bg-background/40 px-3 pr-8 text-sm text-foreground outline-none transition focus:border-ring focus:ring-1 focus:ring-ring"
+                          >
+                            {transportModes.map((mode) => (
+                              <option key={mode} value={mode}>{mode}</option>
+                            ))}
+                          </select>
+                          <ChevronDown
+                            className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground"
+                            aria-hidden="true"
+                          />
+                        </div>
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="slot-type">Tipo de Slot</Label>
+                        <div className="relative">
+                          <select
+                            id="slot-type"
+                            className="h-10 w-full appearance-none rounded-lg border border-border/60 bg-background/40 px-3 pr-8 text-sm text-foreground outline-none transition focus:border-ring focus:ring-1 focus:ring-ring"
+                          >
+                            {slotTypes.map((slot) => (
+                              <option key={slot} value={slot}>{slot}</option>
+                            ))}
+                          </select>
+                          <ChevronDown
+                            className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground"
+                            aria-hidden="true"
+                          />
+                        </div>
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="tariff-type">Tipo de Tarifário</Label>
+                        <div className="relative">
+                          <select
+                            id="tariff-type"
+                            className="h-10 w-full appearance-none rounded-lg border border-border/60 bg-background/40 px-3 pr-8 text-sm text-foreground outline-none transition focus:border-ring focus:ring-1 focus:ring-ring"
+                          >
+                            {tariffTypes.map((tariff) => (
+                              <option key={tariff} value={tariff}>{tariff}</option>
+                            ))}
+                          </select>
+                          <ChevronDown
+                            className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground"
+                            aria-hidden="true"
+                          />
+                        </div>
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="child-age">Idade de Crianças</Label>
+                        <div className="flex gap-2">
+                          <Input
+                            id="child-age-min"
+                            type="number"
+                            defaultValue={0}
+                            className="h-10 w-24 rounded-lg border border-border/60 bg-background/40 px-3 text-sm"
+                          />
+                          <Input
+                            id="child-age-max"
+                            type="number"
+                            defaultValue={12}
+                            className="h-10 w-24 rounded-lg border border-border/60 bg-background/40 px-3 text-sm"
+                          />
+                        </div>
+                      </div>
                     </div>
-                    <DialogFooter>
+
+                    <div className="space-y-2">
+                      <Label>Tags</Label>
+                      <div className="rounded-2xl border border-border/60 bg-background/20 px-3 py-3">
+                        <div className="flex flex-wrap gap-2">
+                          {tagItems.map((tag) => (
+                            <Badge
+                              key={tag}
+                              variant="outline"
+                              className="flex items-center gap-2 px-3 py-1 text-[0.75rem] font-medium"
+                            >
+                              {tag}
+                              <X className="h-3 w-3" aria-hidden="true" />
+                            </Badge>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label>Opções</Label>
+                      <div className="rounded-2xl border border-border/60 bg-background/20 px-3 py-3">
+                        <div className="flex flex-wrap gap-2">
+                          {optionItems.map((option) => (
+                            <Badge
+                              key={option}
+                              variant="outline"
+                              className="flex items-center gap-2 px-3 py-1 text-[0.75rem] font-medium"
+                            >
+                              {option}
+                              <X className="h-3 w-3" aria-hidden="true" />
+                            </Badge>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+
+                    <DialogFooter className="flex flex-wrap items-center justify-between gap-3">
                       <Button
                         type="button"
                         variant="outline"
@@ -251,7 +363,7 @@ export default function Home() {
                       >
                         Cancelar
                       </Button>
-                      <Button type="submit">Salvar</Button>
+                      <Button type="submit">Continuar</Button>
                     </DialogFooter>
                   </form>
                 </DialogContent>
