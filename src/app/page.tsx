@@ -51,7 +51,9 @@ import {
   RefreshCcw,
   PanelsTopLeft,
   Bot,
-  X
+  X,
+  BusFront,
+  ArrowRight
 } from "lucide-react";
 
 import { useRefresh } from "@/hooks/useRefresh";
@@ -238,29 +240,36 @@ export default function Home() {
                     Adicionar
                   </Button>
                 </DialogTrigger>
-                <DialogContent>
-                  <DialogHeader>
-                    <DialogTitle>Transfer Privativo do Paulo</DialogTitle>
-                    <DialogDescription>
-                      Preencha os campos abaixo para cadastrar um novo transfer.
-                    </DialogDescription>
-                  </DialogHeader>
-                  <form className="space-y-6" onSubmit={handleAddSubmit}>
-                    <div className="space-y-2">
-                      <Label htmlFor="transfer-title">Título</Label>
+                <DialogContent className="p-0 rounded-xl overflow-hidden">
+                  <div className="flex items-center gap-3 p-6">
+                    <div className="flex size-11 shrink-0 items-center justify-center rounded-full border">
+                      <BusFront className="h-4 w-4 opacity-80" />
+                    </div>
+                    <div className="flex flex-col gap-1">
+                      <h2 className="text-lg leading-none font-semibold">Transfer Privativo do Paulo</h2>
+                      <p className="text-muted-foreground text-sm">
+                        Preencha os campos abaixo para cadastrar um novo transfer.
+                      </p>
+                    </div>
+                  </div>
+
+                  <form id="transfer-form" className="space-y-5 p-6 pt-0" onSubmit={handleAddSubmit}>
+                    <div className="grid gap-2">
+                      <Label htmlFor="transfer-title" className="mb-1">Título</Label>
                       <Input
                         id="transfer-title"
-                        placeholder="Transfer Privativo do Paulo"
+                        placeholder="Ex.: Transfer Regular"
+                        defaultValue="Transfer Privativo do Paulo"
                         required
                       />
                     </div>
 
-                    <div className="grid gap-4 grid-cols-4">
-                      <div className="space-y-2">
-                        <Label htmlFor="transport-type">Tipo de Transporte</Label>
-                        <Select>
-                          <SelectTrigger id="transport-type">
-                            <SelectValue placeholder="Selecione..." />
+                    <div className="grid items-start gap-x-4 gap-y-5 sm:grid-cols-4">
+                      <div className="grid gap-2 w-full">
+                        <Label htmlFor="transport-type" className="mb-1">Tipo de Transporte</Label>
+                        <Select defaultValue="Compartilhado">
+                          <SelectTrigger id="transport-type" className="w-full">
+                            <SelectValue />
                           </SelectTrigger>
                           <SelectContent>
                             {transportModes.map((mode) => (
@@ -271,11 +280,12 @@ export default function Home() {
                           </SelectContent>
                         </Select>
                       </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="slot-type">Tipo de Slot</Label>
-                        <Select>
-                          <SelectTrigger id="slot-type">
-                            <SelectValue placeholder="Selecione..." />
+
+                      <div className="grid gap-2 w-full">
+                        <Label htmlFor="slot-type" className="mb-1">Tipo de Slot</Label>
+                        <Select defaultValue="Turno">
+                          <SelectTrigger id="slot-type" className="w-full">
+                            <SelectValue />
                           </SelectTrigger>
                           <SelectContent>
                             {slotTypes.map((slot) => (
@@ -286,11 +296,12 @@ export default function Home() {
                           </SelectContent>
                         </Select>
                       </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="tariff-type">Tipo de Tarifário</Label>
-                        <Select>
-                          <SelectTrigger id="tariff-type">
-                            <SelectValue placeholder="Selecione..." />
+
+                      <div className="grid gap-2 w-full">
+                        <Label htmlFor="tariff-type" className="mb-1">Tipo de Tarifário</Label>
+                        <Select defaultValue="Faixa Etária">
+                          <SelectTrigger id="tariff-type" className="w-full">
+                            <SelectValue />
                           </SelectTrigger>
                           <SelectContent>
                             {tariffTypes.map((tariff) => (
@@ -301,73 +312,102 @@ export default function Home() {
                           </SelectContent>
                         </Select>
                       </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="child-age">Idade de Crianças</Label>
-                        <div className="flex items-center gap-2">
+
+                      <div className="grid gap-3">
+                        <Label className="mb-1">Idade de Crianças</Label>
+                        <div className="flex gap-0 h-9">
                           <Input
                             id="child-age-min"
                             type="number"
                             defaultValue={0}
-                            className="h-12 w-20 rounded-lg border border-border/60 bg-background/40 px-3 text-sm"
+                            min={0}
+                            className="w-16 rounded-r-none border-r-0"
+                            placeholder="Min."
                           />
-                          <span className="text-xs text-muted-foreground">até</span>
                           <Input
                             id="child-age-max"
                             type="number"
                             defaultValue={12}
-                            className="h-12 w-20 rounded-lg border border-border/60 bg-background/40 px-3 text-sm"
+                            min={0}
+                            className="w-16 rounded-l-none"
+                            placeholder="Máx."
                           />
                         </div>
                       </div>
                     </div>
 
-                    <div className="space-y-2">
-                      <Label>Tags</Label>
-                      <div className="rounded-2xl border border-border/60 bg-background/20 px-3 py-3">
-                        <div className="flex flex-wrap gap-2">
+                    <div className="gap-2 flex flex-col">
+                      <Label className="mb-1">Tags</Label>
+                      <div className="inline-flex items-center gap-2 whitespace-nowrap rounded-md text-sm font-medium cursor-pointer disabled:pointer-events-none disabled:opacity-50 border bg-background shadow-xs hover:text-accent-foreground dark:border-input px-4 relative justify-start hover:bg-inherit dark:bg-background dark:hover:bg-background transition-none ps-1! h-full min-h-[36px] py-1 pe-9">
+                        <div className="relative flex items-center gap-1 flex-wrap">
                           {tagItems.map((tag) => (
-                            <Badge
-                              key={tag}
-                              variant="outline"
-                              className="flex items-center gap-2 px-3 py-1 text-[0.75rem] font-medium"
-                            >
+                            <div key={tag} className="animate-fadeIn bg-background dark:bg-input/30 dark:border-input text-secondary-foreground hover:bg-background relative inline-flex h-7 cursor-pointer items-center rounded-sm border ps-2 pe-7 pl-2 text-xs font-medium transition-all disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 data-fixed:pe-2">
                               {tag}
-                              <X className="h-3 w-3" aria-hidden="true" />
-                            </Badge>
+                              <button
+                                type="button"
+                                className="text-muted-foreground/80 hover:text-foreground absolute -inset-y-px -end-px flex size-7 items-center cursor-pointer justify-center rounded-e-md border border-transparent p-0 outline-hidden transition-[color,box-shadow] outline-none focus-visible:ring-[3px]"
+                                aria-label="Remove"
+                              >
+                                <X className="h-3.5 w-3.5" />
+                              </button>
+                            </div>
                           ))}
                         </div>
+                        <button
+                          type="button"
+                          className="inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium transition-all cursor-pointer disabled:pointer-events-none disabled:opacity-50 hover:bg-accent dark:hover:bg-accent/50 absolute top-1 end-1.5 size-7 text-muted-foreground hover:text-foreground"
+                          aria-label="Clear all"
+                        >
+                          <X className="h-4 w-4" />
+                        </button>
                       </div>
                     </div>
 
-                    <div className="space-y-2">
-                      <Label>Opções</Label>
-                      <div className="rounded-2xl border border-border/60 bg-background/20 px-3 py-3">
-                        <div className="flex flex-wrap gap-2">
+                    <div className="gap-2 flex flex-col">
+                      <Label className="mb-1">Opções</Label>
+                      <div className="inline-flex items-center gap-2 whitespace-nowrap rounded-md text-sm font-medium cursor-pointer disabled:pointer-events-none disabled:opacity-50 border bg-background shadow-xs hover:text-accent-foreground dark:border-input px-4 relative justify-start hover:bg-inherit dark:bg-background dark:hover:bg-background transition-none ps-1! h-full min-h-[36px] py-1 pe-9">
+                        <div className="relative flex items-center gap-1 flex-wrap">
                           {optionItems.map((option) => (
-                            <Badge
-                              key={option}
-                              variant="outline"
-                              className="flex items-center gap-2 px-3 py-1 text-[0.75rem] font-medium"
-                            >
+                            <div key={option} className="animate-fadeIn bg-background dark:bg-input/30 dark:border-input text-secondary-foreground hover:bg-background relative inline-flex h-7 cursor-pointer items-center rounded-sm border ps-2 pe-7 pl-2 text-xs font-medium transition-all disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 data-fixed:pe-2">
                               {option}
-                              <X className="h-3 w-3" aria-hidden="true" />
-                            </Badge>
+                              <button
+                                type="button"
+                                className="text-muted-foreground/80 hover:text-foreground absolute -inset-y-px -end-px flex size-7 items-center cursor-pointer justify-center rounded-e-md border border-transparent p-0 outline-hidden transition-[color,box-shadow] outline-none focus-visible:ring-[3px]"
+                                aria-label="Remove"
+                              >
+                                <X className="h-3.5 w-3.5" />
+                              </button>
+                            </div>
                           ))}
                         </div>
+                        <button
+                          type="button"
+                          className="inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium transition-all cursor-pointer disabled:pointer-events-none disabled:opacity-50 hover:bg-accent dark:hover:bg-accent/50 absolute top-1 end-1.5 size-7 text-muted-foreground hover:text-foreground"
+                          aria-label="Clear all"
+                        >
+                          <X className="h-4 w-4" />
+                        </button>
                       </div>
                     </div>
-
-                    <DialogFooter className="flex flex-wrap items-center justify-between gap-3">
-                      <Button
-                        type="button"
-                        variant="outline"
-                        onClick={() => setIsDialogOpen(false)}
-                      >
-                        Cancelar
-                      </Button>
-                      <Button type="submit">Continuar</Button>
-                    </DialogFooter>
                   </form>
+
+                  <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end px-6 py-5 bg-background z-10 border-t justify-between!">
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={() => setIsDialogOpen(false)}
+                    >
+                      Cancelar
+                    </Button>
+                    <Button
+                      form="transfer-form"
+                      type="submit"
+                      className="gap-2"
+                    >
+                      Continuar
+                      <ArrowRight className="h-4 w-4" />
+                    </Button>
+                  </div>
                 </DialogContent>
               </Dialog>
             </div>
