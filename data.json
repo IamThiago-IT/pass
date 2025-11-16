@@ -1,0 +1,108 @@
+{
+  "transfers": [
+    {
+      "id": 17,
+      "title": "Transfer Privativo do Paulo",
+      "mode": "Compartilhado",
+      "status": "Liberado",
+      "createdAt": "2025-11-08",
+      "lastUpdate": "2025-11-08"
+    },
+    {
+      "id": 20,
+      "title": "Transfer Privativo do Paulo",
+      "mode": "Compartilhado",
+      "status": "Liberado",
+      "createdAt": "2025-11-08",
+      "lastUpdate": "2025-11-08"
+    },
+    {
+      "id": 22,
+      "title": "Transfer Privativo do Paulo",
+      "mode": "Compartilhado",
+      "status": "Liberado",
+      "createdAt": "2025-11-08",
+      "lastUpdate": "2025-11-08"
+    },
+    {
+      "id": 23,
+      "title": "Transfer Privativo do Paulo",
+      "mode": "Compartilhado",
+      "status": "Liberado",
+      "createdAt": "2025-11-08",
+      "lastUpdate": "2025-11-08"
+    },
+    {
+      "id": 24,
+      "title": "Transfer Privativo do Paulo",
+      "mode": "Compartilhado",
+      "status": "Liberado",
+      "createdAt": "2025-11-08",
+      "lastUpdate": "2025-11-08"
+    },
+    {
+      "id": 25,
+      "title": "Transfer Privativo do Paulo",
+      "mode": "Compartilhado",
+      "status": "Liberado",
+      "createdAt": "2025-11-08",
+      "lastUpdate": "2025-11-08"
+    },
+    {
+      "id": 26,
+      "title": "Transfer Privativo do Paulo",
+      "mode": "Compartilhado",
+      "status": "Liberado",
+      "createdAt": "2025-11-08",
+      "lastUpdate": "2025-11-08"
+    },
+    {
+      "id": 33,
+      "title": "Transfer Privativo do Paulo",
+      "mode": "Privativo",
+      "status": "Liberado",
+      "createdAt": "2025-11-08",
+      "lastUpdate": "2025-11-08"
+    },
+    {
+      "id": 67,
+      "title": "Transfer Privativo do Paulo",
+      "mode": "Compartilhado",
+      "status": "Liberado",
+      "createdAt": "2025-11-09",
+      "lastUpdate": "2025-11-09"
+    },
+    {
+      "id": 68,
+      "title": "Transfer Privativo do Jose",
+      "mode": "Compartilhado",
+      "status": "Liberado",
+      "createdAt": "2025-11-09",
+      "lastUpdate": "2025-11-09"
+    },
+    {
+      "id": 72,
+      "title": "Transfer Compartilhado da Ana",
+      "mode": "Compartilhado",
+      "status": "Pendente",
+      "createdAt": "2025-11-10",
+      "lastUpdate": "2025-11-12"
+    },
+    {
+      "id": 80,
+      "title": "Transfer Privativo do Carla",
+      "mode": "Privativo",
+      "status": "Bloqueado",
+      "createdAt": "2025-11-11",
+      "lastUpdate": "2025-11-13"
+    },
+    {
+      "id": 91,
+      "title": "Transfer Corporativo do João",
+      "mode": "Compartilhado",
+      "status": "Liberado",
+      "createdAt": "2025-11-13",
+      "lastUpdate": "2025-11-14"
+    }
+  ]
+}

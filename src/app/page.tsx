@@ -62,6 +62,7 @@ export default function Home() {
     statusOptions,
     sort,
     toggleSort,
+    refreshData,
   } = useTransferTable();
 
   const transferIds = useMemo(
@@ -183,7 +184,10 @@ export default function Home() {
                 variant="outline"
                 size="lg"
                 className="rounded-lg border-border/60 bg-muted/30 text-sm"
-                onClick={triggerRefresh}
+                onClick={() => {
+                  triggerRefresh();
+                  refreshData();
+                }}
                 disabled={isRefreshing}
               >
                 <RefreshCcw

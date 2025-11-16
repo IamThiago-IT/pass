@@ -17,7 +17,7 @@ export interface SortState {
   direction: SortDirection;
 }
 
-const transfers: Transfer[] = [
+const transferFixtures: Transfer[] = [
   {
     id: 17,
     title: "Transfer Privativo do Paulo",
@@ -27,7 +27,7 @@ const transfers: Transfer[] = [
     lastUpdate: "08/11/2025",
   },
   {
-    id: 20,
+    id: 21,
     title: "Transfer Privativo do Paulo",
     mode: "Compartilhado",
     status: "Liberado",
@@ -105,6 +105,12 @@ export function useTransferTable() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedModes, setSelectedModes] = useState<Set<string>>(new Set());
   const [selectedStatuses, setSelectedStatuses] = useState<Set<string>>(new Set());
+  const apiBaseUrl =
+    process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000";
+  const [transfers, setTransfers] = useState<Transfer[]>(transferFixtures);
+  const [isLoading, setIsLoading] = useState(true);
+  const [refreshKey, setRefreshKey] = useState(0);
+  const [error, setError] = useState<string | null>(null);
 
   const toggleModeFilter = (mode: string) => {
     setSelectedModes((prev) => {
@@ -148,7 +154,7 @@ export function useTransferTable() {
       options.set(transfer.mode, (options.get(transfer.mode) || 0) + 1);
     });
     return Array.from(options.entries());
-  }, []);
+  }, [transfers]);
 
   const statusOptions = useMemo(() => {
     const options = new Map<string, number>();
@@ -156,21 +162,18 @@ export function useTransferTable() {
       options.set(transfer.status, (options.get(transfer.status) || 0) + 1);
     });
     return Array.from(options.entries());
-  }, []);
+  }, [transfers]);
 
   const sortedTransfers = useMemo(() => {
     let items = [...transfers];
 
     if (searchQuery.trim()) {
       const normalized = searchQuery.toLowerCase();
-      items = items.filter((transfer) => {
-        return (
-          transfer.title.toLowerCase().includes(normalized) ||
-          transfer.mode.toLowerCase().includes(normalized) ||
-          transfer.status.toLowerCase().includes(normalized) ||
-          transfer.id.toString().includes(normalized)
-        );
-      });
+      items = items.filter((transfer) =>
+        transfer.title.toLowerCase().includes(normalized) ||
+        transfer.mode.toLowerCase().includes(normalized) ||
+        transfer.status.toLowerCase().includes(normalized)
+      );
     }
 
     if (selectedModes.size > 0) {
@@ -200,7 +203,57 @@ export function useTransferTable() {
     }
 
     return items;
-  }, [searchQuery, selectedModes, selectedStatuses, sort]);
+  }, [transfers, searchQuery, selectedModes, selectedStatuses, sort]);
+
+  const refreshData = () => {
+    setRefreshKey((prev) => prev + 1);
+  };
+
+  useEffect(() => {
+    const controller = new AbortController();
+    let isActive = true;
+
+    const fetchTransfers = async () => {
+      setIsLoading(true);
+      setError(null);
+
+      try {
+        const response = await fetch(`${apiBaseUrl}/transfers`, {
+          signal: controller.signal,
+        });
+
+        if (!response.ok) {
+          throw new Error(`Falha ao carregar transferências: ${response.statusText}`);
+        }
+
+        const data: Transfer[] = await response.json();
+
+        if (isActive) {
+          setTransfers(data);
+        }
+      } catch (err) {
+        if (!isActive || controller.signal.aborted) {
+          return;
+        }
+
+        const message = err instanceof Error
+          ? err.message
+          : "Erro desconhecido ao carregar transferências.";
+        setError(message);
+      } finally {
+        if (isActive) {
+          setIsLoading(false);
+        }
+      }
+    };
+
+    fetchTransfers();
+
+    return () => {
+      isActive = false;
+      controller.abort();
+    };
+  }, [apiBaseUrl, refreshKey]);
 
   return {
     sortedTransfers,
@@ -214,5 +267,8 @@ export function useTransferTable() {
     statusOptions,
     sort,
     toggleSort,
+    isLoading,
+    error,
+    refreshData,
   };
 }
