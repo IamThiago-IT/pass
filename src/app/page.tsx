@@ -5,6 +5,13 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Header } from "@/components/header";
 import {
   Dialog,
@@ -248,72 +255,67 @@ export default function Home() {
                       />
                     </div>
 
-                    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+                    <div className="grid gap-4 grid-cols-4">
                       <div className="space-y-2">
                         <Label htmlFor="transport-type">Tipo de Transporte</Label>
-                        <div className="relative">
-                          <select
-                            id="transport-type"
-                            className="h-10 w-full appearance-none rounded-lg border border-border/60 bg-background/40 px-3 pr-8 text-sm text-foreground outline-none transition focus:border-ring focus:ring-1 focus:ring-ring"
-                          >
+                        <Select>
+                          <SelectTrigger id="transport-type">
+                            <SelectValue placeholder="Selecione..." />
+                          </SelectTrigger>
+                          <SelectContent>
                             {transportModes.map((mode) => (
-                              <option key={mode} value={mode}>{mode}</option>
+                              <SelectItem key={mode} value={mode}>
+                                {mode}
+                              </SelectItem>
                             ))}
-                          </select>
-                          <ChevronDown
-                            className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground"
-                            aria-hidden="true"
-                          />
-                        </div>
+                          </SelectContent>
+                        </Select>
                       </div>
                       <div className="space-y-2">
                         <Label htmlFor="slot-type">Tipo de Slot</Label>
-                        <div className="relative">
-                          <select
-                            id="slot-type"
-                            className="h-10 w-full appearance-none rounded-lg border border-border/60 bg-background/40 px-3 pr-8 text-sm text-foreground outline-none transition focus:border-ring focus:ring-1 focus:ring-ring"
-                          >
+                        <Select>
+                          <SelectTrigger id="slot-type">
+                            <SelectValue placeholder="Selecione..." />
+                          </SelectTrigger>
+                          <SelectContent>
                             {slotTypes.map((slot) => (
-                              <option key={slot} value={slot}>{slot}</option>
+                              <SelectItem key={slot} value={slot}>
+                                {slot}
+                              </SelectItem>
                             ))}
-                          </select>
-                          <ChevronDown
-                            className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground"
-                            aria-hidden="true"
-                          />
-                        </div>
+                          </SelectContent>
+                        </Select>
                       </div>
                       <div className="space-y-2">
                         <Label htmlFor="tariff-type">Tipo de Tarifário</Label>
-                        <div className="relative">
-                          <select
-                            id="tariff-type"
-                            className="h-10 w-full appearance-none rounded-lg border border-border/60 bg-background/40 px-3 pr-8 text-sm text-foreground outline-none transition focus:border-ring focus:ring-1 focus:ring-ring"
-                          >
+                        <Select>
+                          <SelectTrigger id="tariff-type">
+                            <SelectValue placeholder="Selecione..." />
+                          </SelectTrigger>
+                          <SelectContent>
                             {tariffTypes.map((tariff) => (
-                              <option key={tariff} value={tariff}>{tariff}</option>
+                              <SelectItem key={tariff} value={tariff}>
+                                {tariff}
+                              </SelectItem>
                             ))}
-                          </select>
-                          <ChevronDown
-                            className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground"
-                            aria-hidden="true"
-                          />
-                        </div>
+                          </SelectContent>
+                        </Select>
                       </div>
                       <div className="space-y-2">
                         <Label htmlFor="child-age">Idade de Crianças</Label>
-                        <div className="flex gap-2">
+                        <div className="flex items-center gap-2">
                           <Input
                             id="child-age-min"
                             type="number"
                             defaultValue={0}
-                            className="h-10 w-24 rounded-lg border border-border/60 bg-background/40 px-3 text-sm"
+                            className="h-12 w-20 rounded-lg border border-border/60 bg-background/40 px-3 text-sm"
                           />
+                          <span className="text-xs text-muted-foreground">até</span>
                           <Input
                             id="child-age-max"
                             type="number"
                             defaultValue={12}
-                            className="h-10 w-24 rounded-lg border border-border/60 bg-background/40 px-3 text-sm"
+                            className="h-12 w-20 rounded-lg border border-border/60 bg-background/40 px-3 text-sm"
                           />
                         </div>
                       </div>
