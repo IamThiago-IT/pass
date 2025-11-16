@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState, type FormEvent } from "react";
+import { useMemo, useState, type FormEvent } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -45,193 +45,33 @@ import {
   Bot
 } from "lucide-react";
 
-type SortField = "id" | "title" | "mode" | "status" | "createdAt" | "lastUpdate";
-type SortDirection = "asc" | "desc" | null;
-
-interface SortState {
-  field: SortField | null;
-  direction: SortDirection;
-}
-
-const transfers = [
-  {
-    id: 17,
-    title: "Transfer Privativo do Paulo",
-    mode: "Compartilhado",
-    status: "Liberado",
-    createdAt: "08/11/2025",
-    lastUpdate: "08/11/2025",
-  },
-  {
-    id: 20,
-    title: "Transfer Privativo do Paulo",
-    mode: "Compartilhado",
-    status: "Liberado",
-    createdAt: "08/11/2025",
-    lastUpdate: "08/11/2025",
-  },
-  {
-    id: 22,
-    title: "Transfer Privativo do Paulo",
-    mode: "Compartilhado",
-    status: "Liberado",
-    createdAt: "08/11/2025",
-    lastUpdate: "08/11/2025",
-  },
-  {
-    id: 23,
-    title: "Transfer Privativo do Paulo",
-    mode: "Compartilhado",
-    status: "Liberado",
-    createdAt: "08/11/2025",
-    lastUpdate: "08/11/2025",
-  },
-  {
-    id: 24,
-    title: "Transfer Privativo do Paulo",
-    mode: "Compartilhado",
-    status: "Liberado",
-    createdAt: "08/11/2025",
-    lastUpdate: "08/11/2025",
-  },
-  {
-    id: 25,
-    title: "Transfer Privativo do Paulo",
-    mode: "Compartilhado",
-    status: "Liberado",
-    createdAt: "08/11/2025",
-    lastUpdate: "08/11/2025",
-  },
-  {
-    id: 26,
-    title: "Transfer Privativo do Paulo",
-    mode: "Compartilhado",
-    status: "Liberado",
-    createdAt: "08/11/2025",
-    lastUpdate: "08/11/2025",
-  },
-  {
-    id: 33,
-    title: "Transfer Privativo do Paulo",
-    mode: "Privativo",
-    status: "Liberado",
-    createdAt: "08/11/2025",
-    lastUpdate: "08/11/2025",
-  },
-  {
-    id: 67,
-    title: "Transfer Privativo do Paulo",
-    mode: "Compartilhado",
-    status: "Liberado",
-    createdAt: "09/11/2025",
-    lastUpdate: "09/11/2025",
-  },
-  {
-    id: 68,
-    title: "Transfer Privativo do Jose",
-    mode: "Compartilhado",
-    status: "Liberado",
-    createdAt: "09/11/2025",
-    lastUpdate: "09/11/2025",
-  },
-];
+import { useRefresh } from "@/hooks/useRefresh";
+import { useRowSelection } from "@/hooks/useRowSelection";
+import { useTransferTable, type SortField } from "@/hooks/useTransferTable";
 
 export default function Home() {
+  const {
+    sortedTransfers,
+    searchQuery,
+    setSearchQuery,
+    selectedModes,
+    selectedStatuses,
+    toggleModeFilter,
+    toggleStatusFilter,
+    modeOptions,
+    statusOptions,
+    sort,
+    toggleSort,
+  } = useTransferTable();
+
+  const transferIds = useMemo(
+    () => sortedTransfers.map((transfer) => transfer.id),
+    [sortedTransfers]
+  );
+
+  const { selectedRows, toggleSelectAll, toggleSelectRow } = useRowSelection(transferIds);
+  const { isRefreshing, triggerRefresh } = useRefresh();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [isRefreshing, setIsRefreshing] = useState(false);
-  const [selectedRows, setSelectedRows] = useState<Set<number>>(new Set());
-  const [sort, setSort] = useState<SortState>({ field: null, direction: null });
-  const [sortedTransfers, setSortedTransfers] = useState(transfers);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [selectedModes, setSelectedModes] = useState<Set<string>>(new Set());
-  const [selectedStatuses, setSelectedStatuses] = useState<Set<string>>(new Set());
-  const refreshTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  useEffect(() => {
-    return () => {
-      if (refreshTimeoutRef.current) {
-        clearTimeout(refreshTimeoutRef.current);
-      }
-    };
-  }, []);
-
-  useEffect(() => {
-    let sorted = [...transfers];
-
-    // Aplica filtro de busca
-    if (searchQuery.trim()) {
-      sorted = sorted.filter((transfer) => {
-        const query = searchQuery.toLowerCase();
-        return (
-          transfer.title.toLowerCase().includes(query) ||
-          transfer.mode.toLowerCase().includes(query) ||
-          transfer.status.toLowerCase().includes(query) ||
-          transfer.id.toString().includes(query)
-        );
-      });
-    }
-
-    // Aplica filtro de modo
-    if (selectedModes.size > 0) {
-      sorted = sorted.filter((transfer) => selectedModes.has(transfer.mode));
-    }
-
-    // Aplica filtro de status
-    if (selectedStatuses.size > 0) {
-      sorted = sorted.filter((transfer) => selectedStatuses.has(transfer.status));
-    }
-
-    // Aplica ordenação
-    if (sort.field && sort.direction) {
-      sorted.sort((a, b) => {
-        const aValue = a[sort.field as keyof typeof a];
-        const bValue = b[sort.field as keyof typeof b];
-
-        if (typeof aValue === "string" && typeof bValue === "string") {
-          const comparison = aValue.localeCompare(bValue);
-          return sort.direction === "asc" ? comparison : -comparison;
-        }
-
-        if (typeof aValue === "number" && typeof bValue === "number") {
-          return sort.direction === "asc" ? aValue - bValue : bValue - aValue;
-        }
-
-        return 0;
-      });
-    }
-
-    setSortedTransfers(sorted);
-  }, [sort, searchQuery, selectedModes, selectedStatuses]);
-
-  const toggleSort = (field: SortField) => {
-    if (sort.field === field) {
-      if (sort.direction === "asc") {
-        setSort({ field, direction: "desc" });
-      } else {
-        setSort({ field: null, direction: null });
-      }
-    } else {
-      setSort({ field, direction: "asc" });
-    }
-  };
-
-  const toggleSelectAll = () => {
-    if (selectedRows.size === sortedTransfers.length) {
-      setSelectedRows(new Set());
-    } else {
-      setSelectedRows(new Set(sortedTransfers.map((t) => t.id)));
-    }
-  };
-
-  const toggleSelectRow = (id: number) => {
-    const newSelected = new Set(selectedRows);
-    if (newSelected.has(id)) {
-      newSelected.delete(id);
-    } else {
-      newSelected.add(id);
-    }
-    setSelectedRows(newSelected);
-  };
 
   const getSortIcon = (field: SortField) => {
     if (sort.field !== field) {
@@ -242,55 +82,6 @@ export default function Home() {
     ) : (
       <ArrowDown className="h-3.5 w-3.5" />
     );
-  };
-
-  const getModeOptions = () => {
-    const modes = new Map<string, number>();
-    transfers.forEach((transfer) => {
-      modes.set(transfer.mode, (modes.get(transfer.mode) || 0) + 1);
-    });
-    return Array.from(modes.entries());
-  };
-
-  const getStatusOptions = () => {
-    const statuses = new Map<string, number>();
-    transfers.forEach((transfer) => {
-      statuses.set(transfer.status, (statuses.get(transfer.status) || 0) + 1);
-    });
-    return Array.from(statuses.entries());
-  };
-
-  const toggleModeFilter = (mode: string) => {
-    const newModes = new Set(selectedModes);
-    if (newModes.has(mode)) {
-      newModes.delete(mode);
-    } else {
-      newModes.add(mode);
-    }
-    setSelectedModes(newModes);
-  };
-
-  const toggleStatusFilter = (status: string) => {
-    const newStatuses = new Set(selectedStatuses);
-    if (newStatuses.has(status)) {
-      newStatuses.delete(status);
-    } else {
-      newStatuses.add(status);
-    }
-    setSelectedStatuses(newStatuses);
-  };
-
-  const handleRefresh = () => {
-    if (refreshTimeoutRef.current) {
-      clearTimeout(refreshTimeoutRef.current);
-    }
-
-    setIsRefreshing(true);
-
-    refreshTimeoutRef.current = setTimeout(() => {
-      setIsRefreshing(false);
-      refreshTimeoutRef.current = null;
-    }, 1200);
   };
 
   const handleAddSubmit = (event: FormEvent<HTMLFormElement>) => {
@@ -340,7 +131,7 @@ export default function Home() {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="w-48">
                   <div className="space-y-2 p-3">
-                    {getModeOptions().map(([mode, count]) => (
+                    {modeOptions.map(([mode, count]) => (
                       <label key={mode} className="flex items-center gap-2 cursor-pointer">
                         <input
                           type="checkbox"
@@ -370,7 +161,7 @@ export default function Home() {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="w-48">
                   <div className="space-y-2 p-3">
-                    {getStatusOptions().map(([status, count]) => (
+                    {statusOptions.map(([status, count]) => (
                       <label key={status} className="flex items-center gap-2 cursor-pointer">
                         <input
                           type="checkbox"
@@ -392,7 +183,7 @@ export default function Home() {
                 variant="outline"
                 size="lg"
                 className="rounded-lg border-border/60 bg-muted/30 text-sm"
-                onClick={handleRefresh}
+                onClick={triggerRefresh}
                 disabled={isRefreshing}
               >
                 <RefreshCcw
