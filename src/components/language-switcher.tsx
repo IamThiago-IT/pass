@@ -2,6 +2,7 @@
 
 import { useLocale } from 'next-intl';
 import { useRouter, usePathname } from '@/i18n/routing';
+import { Globe } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -21,7 +22,8 @@ export default function LanguageSwitcher() {
 
   return (
     <Select defaultValue={locale} onValueChange={handleChange}>
-      <SelectTrigger className="w-[140px]">
+      <SelectTrigger className="w-fit border-none shadow-none bg-transparent focus:ring-0 px-2 gap-2">
+        <Globe className="h-4 w-4 text-muted-foreground" />
         <SelectValue placeholder="Language" />
       </SelectTrigger>
       <SelectContent>
