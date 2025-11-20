@@ -240,35 +240,36 @@ export default function Home() {
                     Adicionar
                   </Button>
                 </DialogTrigger>
-                <DialogContent className="p-0 rounded-xl overflow-hidden">
-                  <div className="flex items-center gap-3 p-6">
-                    <div className="flex size-11 shrink-0 items-center justify-center rounded-full border">
-                      <BusFront className="h-4 w-4 opacity-80" />
+                <DialogContent className="p-0 rounded-xl overflow-hidden max-w-2xl w-full">
+                  <div className="flex items-center gap-4 p-6 border-b border-border/40 bg-muted/10">
+                    <div className="flex size-12 shrink-0 items-center justify-center rounded-full border bg-background shadow-sm">
+                      <BusFront className="h-5 w-5 text-emerald-600" />
                     </div>
                     <div className="flex flex-col gap-1">
-                      <h2 className="text-lg leading-none font-semibold">Transfer Privativo do Paulo</h2>
+                      <h2 className="text-lg leading-none font-semibold tracking-tight">Novo Transfer</h2>
                       <p className="text-muted-foreground text-sm">
-                        Preencha os campos abaixo para cadastrar um novo transfer.
+                        Preencha os detalhes do serviço abaixo.
                       </p>
                     </div>
                   </div>
 
-                  <form id="transfer-form" className="space-y-5 p-6 pt-0" onSubmit={handleAddSubmit}>
+                  <form id="transfer-form" className="space-y-6 p-6" onSubmit={handleAddSubmit}>
                     <div className="grid gap-2">
-                      <Label htmlFor="transfer-title" className="mb-1">Título</Label>
+                      <Label htmlFor="transfer-title" className="text-sm font-medium">Título do Transfer</Label>
                       <Input
                         id="transfer-title"
-                        placeholder="Ex.: Transfer Regular"
+                        placeholder="Ex.: Transfer Regular - Aeroporto x Hotel"
                         defaultValue="Transfer Privativo do Paulo"
+                        className="h-10"
                         required
                       />
                     </div>
 
-                    <div className="grid items-start gap-x-4 gap-y-5 sm:grid-cols-4">
+                    <div className="grid items-start gap-6 sm:grid-cols-2">
                       <div className="grid gap-2 w-full">
-                        <Label htmlFor="transport-type" className="mb-1">Tipo de Transporte</Label>
+                        <Label htmlFor="transport-type" className="text-sm font-medium">Tipo de Transporte</Label>
                         <Select defaultValue="Compartilhado">
-                          <SelectTrigger id="transport-type" className="w-full">
+                          <SelectTrigger id="transport-type" className="w-full h-10">
                             <SelectValue />
                           </SelectTrigger>
                           <SelectContent>
@@ -282,9 +283,9 @@ export default function Home() {
                       </div>
 
                       <div className="grid gap-2 w-full">
-                        <Label htmlFor="slot-type" className="mb-1">Tipo de Slot</Label>
+                        <Label htmlFor="slot-type" className="text-sm font-medium">Tipo de Slot</Label>
                         <Select defaultValue="Turno">
-                          <SelectTrigger id="slot-type" className="w-full">
+                          <SelectTrigger id="slot-type" className="w-full h-10">
                             <SelectValue />
                           </SelectTrigger>
                           <SelectContent>
@@ -298,9 +299,9 @@ export default function Home() {
                       </div>
 
                       <div className="grid gap-2 w-full">
-                        <Label htmlFor="tariff-type" className="mb-1">Tipo de Tarifário</Label>
+                        <Label htmlFor="tariff-type" className="text-sm font-medium">Tipo de Tarifário</Label>
                         <Select defaultValue="Faixa Etária">
-                          <SelectTrigger id="tariff-type" className="w-full">
+                          <SelectTrigger id="tariff-type" className="w-full h-10">
                             <SelectValue />
                           </SelectTrigger>
                           <SelectContent>
@@ -313,98 +314,94 @@ export default function Home() {
                         </Select>
                       </div>
 
-                      <div className="grid gap-3">
-                        <Label className="mb-1">Idade de Crianças</Label>
-                        <div className="flex gap-0 h-9">
-                          <Input
-                            id="child-age-min"
-                            type="number"
-                            defaultValue={0}
-                            min={0}
-                            className="w-16 rounded-r-none border-r-0"
-                            placeholder="Min."
-                          />
-                          <Input
-                            id="child-age-max"
-                            type="number"
-                            defaultValue={12}
-                            min={0}
-                            className="w-16 rounded-l-none"
-                            placeholder="Máx."
-                          />
+                      <div className="grid gap-2">
+                        <Label className="text-sm font-medium">Idade de Crianças (Anos)</Label>
+                        <div className="flex items-center gap-2">
+                          <div className="relative flex-1">
+                            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-xs text-muted-foreground">Min</span>
+                            <Input
+                              id="child-age-min"
+                              type="number"
+                              defaultValue={0}
+                              min={0}
+                              className="pl-9 h-10"
+                            />
+                          </div>
+                          <span className="text-muted-foreground">-</span>
+                          <div className="relative flex-1">
+                            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-xs text-muted-foreground">Máx</span>
+                            <Input
+                              id="child-age-max"
+                              type="number"
+                              defaultValue={12}
+                              min={0}
+                              className="pl-9 h-10"
+                            />
+                          </div>
                         </div>
                       </div>
                     </div>
 
                     <div className="gap-2 flex flex-col">
-                      <Label className="mb-1">Tags</Label>
-                      <div className="inline-flex items-center gap-2 whitespace-nowrap rounded-md text-sm font-medium cursor-pointer disabled:pointer-events-none disabled:opacity-50 border bg-background shadow-xs hover:text-accent-foreground dark:border-input px-4 relative justify-start hover:bg-inherit dark:bg-background dark:hover:bg-background transition-none ps-1! h-full min-h-[36px] py-1 pe-9">
-                        <div className="relative flex items-center gap-1 flex-wrap">
+                      <Label className="text-sm font-medium">Tags Regionais</Label>
+                      <div className="min-h-[48px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm shadow-sm">
+                        <div className="flex flex-wrap gap-2">
                           {tagItems.map((tag) => (
-                            <div key={tag} className="animate-fadeIn bg-background dark:bg-input/30 dark:border-input text-secondary-foreground hover:bg-background relative inline-flex h-7 cursor-pointer items-center rounded-sm border ps-2 pe-7 pl-2 text-xs font-medium transition-all disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 data-fixed:pe-2">
+                            <div key={tag} className="inline-flex items-center gap-1 rounded-md border bg-muted/50 px-2.5 py-1 text-xs font-medium text-secondary-foreground transition-colors hover:bg-muted">
                               {tag}
                               <button
                                 type="button"
-                                className="text-muted-foreground/80 hover:text-foreground absolute -inset-y-px -end-px flex size-7 items-center cursor-pointer justify-center rounded-e-md border border-transparent p-0 outline-hidden transition-[color,box-shadow] outline-none focus-visible:ring-[3px]"
-                                aria-label="Remove"
+                                className="ml-1 rounded-full outline-none ring-offset-background focus:ring-2 focus:ring-ring focus:ring-offset-2"
                               >
-                                <X className="h-3.5 w-3.5" />
+                                <X className="h-3 w-3 text-muted-foreground hover:text-foreground" />
                               </button>
                             </div>
                           ))}
+                          <button type="button" className="inline-flex items-center gap-1 rounded-md border border-dashed px-2 py-1 text-xs text-muted-foreground hover:text-foreground">
+                            <Plus className="h-3 w-3" /> Adicionar
+                          </button>
                         </div>
-                        <button
-                          type="button"
-                          className="inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium transition-all cursor-pointer disabled:pointer-events-none disabled:opacity-50 hover:bg-accent dark:hover:bg-accent/50 absolute top-1 end-1.5 size-7 text-muted-foreground hover:text-foreground"
-                          aria-label="Clear all"
-                        >
-                          <X className="h-4 w-4" />
-                        </button>
                       </div>
                     </div>
 
                     <div className="gap-2 flex flex-col">
-                      <Label className="mb-1">Opções</Label>
-                      <div className="inline-flex items-center gap-2 whitespace-nowrap rounded-md text-sm font-medium cursor-pointer disabled:pointer-events-none disabled:opacity-50 border bg-background shadow-xs hover:text-accent-foreground dark:border-input px-4 relative justify-start hover:bg-inherit dark:bg-background dark:hover:bg-background transition-none ps-1! h-full min-h-[36px] py-1 pe-9">
-                        <div className="relative flex items-center gap-1 flex-wrap">
+                      <Label className="text-sm font-medium">Opções Adicionais</Label>
+                      <div className="min-h-[48px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm shadow-sm">
+                        <div className="flex flex-wrap gap-2">
                           {optionItems.map((option) => (
-                            <div key={option} className="animate-fadeIn bg-background dark:bg-input/30 dark:border-input text-secondary-foreground hover:bg-background relative inline-flex h-7 cursor-pointer items-center rounded-sm border ps-2 pe-7 pl-2 text-xs font-medium transition-all disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 data-fixed:pe-2">
+                            <div key={option} className="inline-flex items-center gap-1 rounded-md border bg-muted/50 px-2.5 py-1 text-xs font-medium text-secondary-foreground transition-colors hover:bg-muted">
                               {option}
                               <button
                                 type="button"
-                                className="text-muted-foreground/80 hover:text-foreground absolute -inset-y-px -end-px flex size-7 items-center cursor-pointer justify-center rounded-e-md border border-transparent p-0 outline-hidden transition-[color,box-shadow] outline-none focus-visible:ring-[3px]"
-                                aria-label="Remove"
+                                className="ml-1 rounded-full outline-none ring-offset-background focus:ring-2 focus:ring-ring focus:ring-offset-2"
                               >
-                                <X className="h-3.5 w-3.5" />
+                                <X className="h-3 w-3 text-muted-foreground hover:text-foreground" />
                               </button>
                             </div>
                           ))}
+                           <button type="button" className="inline-flex items-center gap-1 rounded-md border border-dashed px-2 py-1 text-xs text-muted-foreground hover:text-foreground">
+                            <Plus className="h-3 w-3" /> Adicionar
+                          </button>
                         </div>
-                        <button
-                          type="button"
-                          className="inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium transition-all cursor-pointer disabled:pointer-events-none disabled:opacity-50 hover:bg-accent dark:hover:bg-accent/50 absolute top-1 end-1.5 size-7 text-muted-foreground hover:text-foreground"
-                          aria-label="Clear all"
-                        >
-                          <X className="h-4 w-4" />
-                        </button>
                       </div>
                     </div>
                   </form>
 
-                  <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end px-6 py-5 bg-background z-10 border-t justify-between!">
+                  <div className="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end px-6 py-4 bg-muted/10 border-t">
                     <Button
                       type="button"
                       variant="outline"
                       onClick={() => setIsDialogOpen(false)}
+                      className="h-10"
                     >
                       Cancelar
                     </Button>
                     <Button
                       form="transfer-form"
                       type="submit"
-                      className="gap-2"
+                      className="gap-2 h-10 px-6"
                     >
-                      Continuar
+                      Salvar Transfer
                       <ArrowRight className="h-4 w-4" />
                     </Button>
                   </div>
