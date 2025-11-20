@@ -36,67 +36,71 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar"
 
-// This is sample data.
-const data = {
-  user: {
-    name: "shadcn",
-    email: "m@example.com",
-  },
-  teams: [
-    { name: "Pass", logo: Building2 },
-    { name: "Allinsys", logo: Building2 },
-    { name: "Google", logo: Building2 },
-  ],
-  navMain: [
-    {
-      group: "Principal",
-      items: [
-        { title: "Painel", url: "/", icon: LayoutGrid, isActive: false },
-        { title: "Atividade", url: "#", icon: Activity, isActive: true },
-      ],
-    },
-    {
-      group: "Serviços",
-      items: [
-        { title: "Transfer", url: "/transfer", icon: Briefcase, isActive: false },
-        { title: "Combo", url: "#", icon: Layers, isActive: false },
-        { title: "Hospedagem", url: "#", icon: Home, isActive: false },
-        { title: "Ingresso", url: "#", icon: Briefcase, isActive: false },
-        { title: "Passeio", url: "#", icon: Plane, isActive: false },
-        { title: "Experiência", url: "#", icon: Eye, isActive: false },
-        { title: "Circuito", url: "#", icon: Radio, isActive: false },
-      ],
-    },
-    {
-      group: "Comercial",
-      items: [
-        { title: "Tarifário", url: "#", icon: DollarSign, isActive: false },
-        { title: "Disponibilidade", url: "#", icon: Calendar, isActive: false },
-      ],
-    },
-    {
-      group: "Complementos",
-      items: [
-        { title: "Slots", url: "#", icon: Zap, isActive: false },
-        { title: "Perímetros", url: "#", icon: MapPin, isActive: false },
-        { title: "Diretrizes", url: "#", icon: BookOpen, isActive: false },
-      ],
-    },
-    {
-      group: "Organização",
-      items: [
-        { title: "Configurações", url: "#", icon: Settings, isActive: false },
-      ],
-    },
-  ],
-  projects: [
-    { name: "Design Engineering", url: "#", icon: Frame },
-    { name: "Sales & Marketing", url: "#", icon: PieChart },
-    { name: "Travel", url: "#", icon: MapPin },
-  ],
-}
+import { useTranslations } from "next-intl"
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const t = useTranslations("Sidebar")
+
+  // This is sample data.
+  const data = {
+    user: {
+      name: "shadcn",
+      email: "m@example.com",
+    },
+    teams: [
+      { name: "Pass", logo: Building2 },
+      { name: "Allinsys", logo: Building2 },
+      { name: "Google", logo: Building2 },
+    ],
+    navMain: [
+      {
+        group: t("Principal"),
+        items: [
+          { title: t("Dashboard"), url: "/", icon: LayoutGrid, isActive: false },
+          { title: t("Activity"), url: "#", icon: Activity, isActive: true },
+        ],
+      },
+      {
+        group: t("Services"),
+        items: [
+          { title: t("Transfer"), url: "/transfer", icon: Briefcase, isActive: false },
+          { title: t("Combo"), url: "#", icon: Layers, isActive: false },
+          { title: t("Hosting"), url: "#", icon: Home, isActive: false },
+          { title: t("Ticket"), url: "#", icon: Briefcase, isActive: false },
+          { title: t("Tour"), url: "#", icon: Plane, isActive: false },
+          { title: t("Experience"), url: "#", icon: Eye, isActive: false },
+          { title: t("Circuit"), url: "#", icon: Radio, isActive: false },
+        ],
+      },
+      {
+        group: t("Commercial"),
+        items: [
+          { title: t("Tariff"), url: "#", icon: DollarSign, isActive: false },
+          { title: t("Availability"), url: "#", icon: Calendar, isActive: false },
+        ],
+      },
+      {
+        group: t("Addons"),
+        items: [
+          { title: t("Slots"), url: "#", icon: Zap, isActive: false },
+          { title: t("Perimeters"), url: "#", icon: MapPin, isActive: false },
+          { title: t("Guidelines"), url: "#", icon: BookOpen, isActive: false },
+        ],
+      },
+      {
+        group: t("Organization"),
+        items: [
+          { title: t("Settings"), url: "#", icon: Settings, isActive: false },
+        ],
+      },
+    ],
+    projects: [
+      { name: "Design Engineering", url: "#", icon: Frame },
+      { name: "Sales & Marketing", url: "#", icon: PieChart },
+      { name: "Travel", url: "#", icon: MapPin },
+    ],
+  }
+
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>

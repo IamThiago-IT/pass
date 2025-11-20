@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { getTransfers } from "@/app/actions/transfers";
 
 export type Transfer = {
   id: number;
@@ -17,97 +18,13 @@ export interface SortState {
   direction: SortDirection;
 }
 
-const transferFixtures: Transfer[] = [
-  {
-    id: 17,
-    title: "Transfer Privativo do Paulo",
-    mode: "Compartilhado",
-    status: "Liberado",
-    createdAt: "08/11/2025",
-    lastUpdate: "08/11/2025",
-  },
-  {
-    id: 21,
-    title: "Transfer Privativo do Paulo",
-    mode: "Compartilhado",
-    status: "Liberado",
-    createdAt: "08/11/2025",
-    lastUpdate: "08/11/2025",
-  },
-  {
-    id: 22,
-    title: "Transfer Privativo do Paulo",
-    mode: "Compartilhado",
-    status: "Liberado",
-    createdAt: "08/11/2025",
-    lastUpdate: "08/11/2025",
-  },
-  {
-    id: 23,
-    title: "Transfer Privativo do Paulo",
-    mode: "Compartilhado",
-    status: "Liberado",
-    createdAt: "08/11/2025",
-    lastUpdate: "08/11/2025",
-  },
-  {
-    id: 24,
-    title: "Transfer Privativo do Paulo",
-    mode: "Compartilhado",
-    status: "Liberado",
-    createdAt: "08/11/2025",
-    lastUpdate: "08/11/2025",
-  },
-  {
-    id: 25,
-    title: "Transfer Privativo do Paulo",
-    mode: "Compartilhado",
-    status: "Liberado",
-    createdAt: "08/11/2025",
-    lastUpdate: "08/11/2025",
-  },
-  {
-    id: 26,
-    title: "Transfer Privativo do Paulo",
-    mode: "Compartilhado",
-    status: "Liberado",
-    createdAt: "08/11/2025",
-    lastUpdate: "08/11/2025",
-  },
-  {
-    id: 33,
-    title: "Transfer Privativo do Paulo",
-    mode: "Privativo",
-    status: "Liberado",
-    createdAt: "08/11/2025",
-    lastUpdate: "08/11/2025",
-  },
-  {
-    id: 67,
-    title: "Transfer Privativo do Paulo",
-    mode: "Compartilhado",
-    status: "Liberado",
-    createdAt: "09/11/2025",
-    lastUpdate: "09/11/2025",
-  },
-  {
-    id: 68,
-    title: "Transfer Privativo do Jose",
-    mode: "Compartilhado",
-    status: "Liberado",
-    createdAt: "09/11/2025",
-    lastUpdate: "09/11/2025",
-  },
-];
-
 export function useTransferTable() {
   const [sort, setSort] = useState<SortState>({ field: null, direction: null });
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedModes, setSelectedModes] = useState<Set<string>>(new Set());
   const [selectedStatuses, setSelectedStatuses] = useState<Set<string>>(new Set());
-  const apiBaseUrl =
-    process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000";
-  const [transfers, setTransfers] = useState<Transfer[]>(transferFixtures);
+  
+  const [transfers, setTransfers] = useState<Transfer[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [refreshKey, setRefreshKey] = useState(0);
   const [error, setError] = useState<string | null>(null);
@@ -210,7 +127,6 @@ export function useTransferTable() {
   };
 
   useEffect(() => {
-    const controller = new AbortController();
     let isActive = true;
 
     const fetchTransfers = async () => {
@@ -218,21 +134,13 @@ export function useTransferTable() {
       setError(null);
 
       try {
-        const response = await fetch(`${apiBaseUrl}/transfers`, {
-          signal: controller.signal,
-        });
-
-        if (!response.ok) {
-          throw new Error(`Falha ao carregar transferências: ${response.statusText}`);
-        }
-
-        const data: Transfer[] = await response.json();
+        const data = await getTransfers();
 
         if (isActive) {
           setTransfers(data);
         }
       } catch (err) {
-        if (!isActive || controller.signal.aborted) {
+        if (!isActive) {
           return;
         }
 
@@ -251,9 +159,8 @@ export function useTransferTable() {
 
     return () => {
       isActive = false;
-      controller.abort();
     };
-  }, [apiBaseUrl, refreshKey]);
+  }, [refreshKey]);
 
   return {
     sortedTransfers,

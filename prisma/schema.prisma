@@ -1,0 +1,20 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client"
+  output   = "../node_modules/@prisma/client"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model Transfer {
+  id         Int      @id @default(autoincrement())
+  title      String
+  mode       String
+  status     String
+  createdAt  DateTime @default(now())
+  lastUpdate DateTime @updatedAt
+}

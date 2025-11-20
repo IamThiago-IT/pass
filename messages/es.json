@@ -1,0 +1,90 @@
+{
+  "HomePage": {
+    "title": "¡Hola mundo!",
+    "about": "Ir a la página acerca de"
+  },
+  "Navigation": {
+    "home": "Inicio",
+    "about": "Acerca de"
+  },
+  "Header": {
+    "title": "Transferencia",
+    "searchPlaceholder": "Buscar...",
+    "toggleTheme": "Alternar tema"
+  },
+  "Sidebar": {
+    "Principal": "Principal",
+    "Dashboard": "Panel",
+    "Activity": "Actividad",
+    "Services": "Servicios",
+    "Transfer": "Transferencia",
+    "Combo": "Combo",
+    "Hosting": "Alojamiento",
+    "Ticket": "Entrada",
+    "Tour": "Paseo",
+    "Experience": "Experiencia",
+    "Circuit": "Circuito",
+    "Commercial": "Comercial",
+    "Tariff": "Tarifario",
+    "Availability": "Disponibilidad",
+    "Addons": "Complementos",
+    "Slots": "Slots",
+    "Perimeters": "Perímetros",
+    "Guidelines": "Directrices",
+    "Organization": "Organización",
+    "Settings": "Configuraciones"
+  },
+  "Transfers": {
+    "searchPlaceholder": "Buscar...",
+    "mode": "Modo",
+    "status": "Estado",
+    "refresh": "Actualizar",
+    "refreshing": "Actualizando",
+    "export": "Exportar",
+    "exportCSV": "Exportar CSV",
+    "exportExcel": "Exportar Excel",
+    "exportPDF": "Exportar PDF",
+    "add": "Añadir",
+    "newTransfer": "Nuevo Transfer",
+    "newTransferDesc": "Complete los detalles del servicio a continuación.",
+    "titleLabel": "Título del Transfer",
+    "titlePlaceholder": "Ej.: Transfer Regular - Aeropuerto x Hotel",
+    "transportType": "Tipo de Transporte",
+    "slotType": "Tipo de Slot",
+    "tariffType": "Tipo de Tarifario",
+    "childAge": "Edad de Niños (Años)",
+    "min": "Mín",
+    "max": "Máx",
+    "regionalTags": "Etiquetas Regionales",
+    "additionalOptions": "Opciones Adicionales",
+    "cancel": "Cancelar",
+    "save": "Guardar Transfer",
+    "table": {
+      "id": "ID",
+      "title": "Título",
+      "mode": "Modo",
+      "status": "Estado",
+      "createdAt": "Creado en",
+      "lastUpdate": "Última modificación",
+      "selectedRows": "{selected} de {total} fila(s) seleccionadas.",
+      "perPage": "{count} / página",
+      "pageInfo": "Página {current} de {total}"
+    },
+    "options": {
+      "Compartilhado": "Compartido",
+      "Privado": "Privado",
+      "Executivo": "Ejecutivo",
+      "Liberado": "Liberado",
+      "Turno": "Turno",
+      "Período": "Período",
+      "Evento": "Evento",
+      "Faixa Etária": "Rango de Edad",
+      "Valor Fixo": "Valor Fijo",
+      "Por Passageiro": "Por Pasajero",
+      "Região dos Lagos": "Región de los Lagos",
+      "Rio x Rio": "Rio x Rio",
+      "Confirmação Imediata": "Confirmación Inmediata",
+      "Utilização somente no dia": "Uso solo en el día"
+    }
+  }
+}

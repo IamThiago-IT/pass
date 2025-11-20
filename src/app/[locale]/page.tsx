@@ -55,10 +55,12 @@ import {
   BusFront,
   ArrowRight
 } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { useRefresh } from "@/hooks/useRefresh";
 import { useRowSelection } from "@/hooks/useRowSelection";
 import { useTransferTable, type SortField } from "@/hooks/useTransferTable";
+import { createTransfer } from "@/app/actions/transfers";
 
 const transportModes = ["Compartilhado", "Privado", "Executivo"];
 const slotTypes = ["Turno", "Período", "Evento"];
@@ -67,6 +69,7 @@ const tagItems = ["Região dos Lagos", "Rio x Rio"];
 const optionItems = ["Confirmação Imediata", "Utilização somente no dia"];
 
 export default function Home() {
+  const t = useTranslations("Transfers");
   const {
     sortedTransfers,
     searchQuery,
@@ -102,9 +105,22 @@ export default function Home() {
     );
   };
 
-  const handleAddSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleAddSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setIsDialogOpen(false);
+    const formData = new FormData(event.currentTarget);
+    
+    const title = formData.get("title") as string;
+    const mode = formData.get("mode") as string;
+    
+    if (title && mode) {
+      await createTransfer({
+        title,
+        mode,
+        status: "Liberado"
+      });
+      refreshData();
+      setIsDialogOpen(false);
+    }
   };
 
   return (
@@ -128,7 +144,7 @@ export default function Home() {
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 transform text-muted-foreground" />
                 <Input
-                  placeholder="Buscar..."
+                  placeholder={t("searchPlaceholder")}
                   className="h-10 w-64 rounded-lg border border-border/60 bg-background/40 pl-10 text-sm"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
@@ -143,7 +159,7 @@ export default function Home() {
                     className="rounded-lg border-border/60 bg-muted/30 text-sm"
                   >
                     <Filter className="h-4 w-4" />
-                    Modo
+                    {t("mode")}
                     <ChevronDown className="h-4 w-4 text-muted-foreground" aria-hidden="true" />
                   </Button>
                 </DropdownMenuTrigger>
@@ -157,7 +173,7 @@ export default function Home() {
                           onChange={() => toggleModeFilter(mode)}
                           className="h-4 w-4 rounded border-border/60 bg-transparent accent-emerald-500"
                         />
-                        <span className="text-sm flex-1">{mode}</span>
+                        <span className="text-sm flex-1">{t(`options.${mode}`)}</span>
                         <span className="text-xs text-muted-foreground">{count}</span>
                       </label>
                     ))}
@@ -173,7 +189,7 @@ export default function Home() {
                     className="rounded-lg border-border/60 bg-muted/30 text-sm"
                   >
                     <Filter className="h-4 w-4" />
-                    Status
+                    {t("status")}
                     <ChevronDown className="h-4 w-4 text-muted-foreground" aria-hidden="true" />
                   </Button>
                 </DropdownMenuTrigger>
@@ -187,7 +203,7 @@ export default function Home() {
                           onChange={() => toggleStatusFilter(status)}
                           className="h-4 w-4 rounded border-border/60 bg-transparent accent-emerald-500"
                         />
-                        <span className="text-sm flex-1">{status}</span>
+                        <span className="text-sm flex-1">{t(`options.${status}`)}</span>
                         <span className="text-xs text-muted-foreground">{count}</span>
                       </label>
                     ))}
@@ -211,7 +227,7 @@ export default function Home() {
                   className={cn("h-4 w-4", isRefreshing && "animate-spin")}
                   aria-hidden="true"
                 />
-                {isRefreshing ? "Atualizando" : "Atualizar"}
+                {isRefreshing ? t("refreshing") : t("refresh")}
               </Button>
 
               <DropdownMenu>
@@ -222,14 +238,14 @@ export default function Home() {
                     className="rounded-lg border-border/60 bg-muted/30 text-sm"
                   >
                     <Download className="h-4 w-4" />
-                    Exportar
+                    {t("export")}
                     <ChevronDown className="h-4 w-4 text-muted-foreground" aria-hidden="true" />
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-48">
-                  <DropdownMenuItem>Exportar CSV</DropdownMenuItem>
-                  <DropdownMenuItem>Exportar Excel</DropdownMenuItem>
-                  <DropdownMenuItem>Exportar PDF</DropdownMenuItem>
+                  <DropdownMenuItem>{t("exportCSV")}</DropdownMenuItem>
+                  <DropdownMenuItem>{t("exportExcel")}</DropdownMenuItem>
+                  <DropdownMenuItem>{t("exportPDF")}</DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
 
@@ -237,7 +253,7 @@ export default function Home() {
                 <DialogTrigger asChild>
                   <Button size="lg" className="rounded-lg px-4 text-sm">
                     <Plus className="h-4 w-4" />
-                    Adicionar
+                    {t("add")}
                   </Button>
                 </DialogTrigger>
                 <DialogContent className="p-0 rounded-xl overflow-hidden max-w-2xl w-full">
@@ -246,19 +262,20 @@ export default function Home() {
                       <BusFront className="h-5 w-5 text-emerald-600" />
                     </div>
                     <div className="flex flex-col gap-1">
-                      <h2 className="text-lg leading-none font-semibold tracking-tight">Novo Transfer</h2>
+                      <h2 className="text-lg leading-none font-semibold tracking-tight">{t("newTransfer")}</h2>
                       <p className="text-muted-foreground text-sm">
-                        Preencha os detalhes do serviço abaixo.
+                        {t("newTransferDesc")}
                       </p>
                     </div>
                   </div>
 
                   <form id="transfer-form" className="space-y-6 p-6" onSubmit={handleAddSubmit}>
                     <div className="grid gap-2">
-                      <Label htmlFor="transfer-title" className="text-sm font-medium">Título do Transfer</Label>
+                      <Label htmlFor="transfer-title" className="text-sm font-medium">{t("titleLabel")}</Label>
                       <Input
                         id="transfer-title"
-                        placeholder="Ex.: Transfer Regular - Aeroporto x Hotel"
+                        name="title"
+                        placeholder={t("titlePlaceholder")}
                         defaultValue="Transfer Privativo do Paulo"
                         className="h-10"
                         required
@@ -267,15 +284,15 @@ export default function Home() {
 
                     <div className="grid items-start gap-6 sm:grid-cols-2">
                       <div className="grid gap-2 w-full">
-                        <Label htmlFor="transport-type" className="text-sm font-medium">Tipo de Transporte</Label>
-                        <Select defaultValue="Compartilhado">
+                        <Label htmlFor="transport-type" className="text-sm font-medium">{t("transportType")}</Label>
+                        <Select name="mode" defaultValue="Compartilhado">
                           <SelectTrigger id="transport-type" className="w-full h-10">
                             <SelectValue />
                           </SelectTrigger>
                           <SelectContent>
                             {transportModes.map((mode) => (
                               <SelectItem key={mode} value={mode}>
-                                {mode}
+                                {t(`options.${mode}`)}
                               </SelectItem>
                             ))}
                           </SelectContent>
@@ -283,7 +300,7 @@ export default function Home() {
                       </div>
 
                       <div className="grid gap-2 w-full">
-                        <Label htmlFor="slot-type" className="text-sm font-medium">Tipo de Slot</Label>
+                        <Label htmlFor="slot-type" className="text-sm font-medium">{t("slotType")}</Label>
                         <Select defaultValue="Turno">
                           <SelectTrigger id="slot-type" className="w-full h-10">
                             <SelectValue />
@@ -291,7 +308,7 @@ export default function Home() {
                           <SelectContent>
                             {slotTypes.map((slot) => (
                               <SelectItem key={slot} value={slot}>
-                                {slot}
+                                {t(`options.${slot}`)}
                               </SelectItem>
                             ))}
                           </SelectContent>
@@ -299,7 +316,7 @@ export default function Home() {
                       </div>
 
                       <div className="grid gap-2 w-full">
-                        <Label htmlFor="tariff-type" className="text-sm font-medium">Tipo de Tarifário</Label>
+                        <Label htmlFor="tariff-type" className="text-sm font-medium">{t("tariffType")}</Label>
                         <Select defaultValue="Faixa Etária">
                           <SelectTrigger id="tariff-type" className="w-full h-10">
                             <SelectValue />
@@ -307,7 +324,7 @@ export default function Home() {
                           <SelectContent>
                             {tariffTypes.map((tariff) => (
                               <SelectItem key={tariff} value={tariff}>
-                                {tariff}
+                                {t(`options.${tariff}`)}
                               </SelectItem>
                             ))}
                           </SelectContent>
@@ -315,10 +332,10 @@ export default function Home() {
                       </div>
 
                       <div className="grid gap-2">
-                        <Label className="text-sm font-medium">Idade de Crianças (Anos)</Label>
+                        <Label className="text-sm font-medium">{t("childAge")}</Label>
                         <div className="flex items-center gap-2">
                           <div className="relative flex-1">
-                            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-xs text-muted-foreground">Min</span>
+                            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-xs text-muted-foreground">{t("min")}</span>
                             <Input
                               id="child-age-min"
                               type="number"
@@ -329,7 +346,7 @@ export default function Home() {
                           </div>
                           <span className="text-muted-foreground">-</span>
                           <div className="relative flex-1">
-                            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-xs text-muted-foreground">Máx</span>
+                            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-xs text-muted-foreground">{t("max")}</span>
                             <Input
                               id="child-age-max"
                               type="number"
@@ -343,12 +360,12 @@ export default function Home() {
                     </div>
 
                     <div className="gap-2 flex flex-col">
-                      <Label className="text-sm font-medium">Tags Regionais</Label>
+                      <Label className="text-sm font-medium">{t("regionalTags")}</Label>
                       <div className="min-h-[48px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm shadow-sm">
                         <div className="flex flex-wrap gap-2">
                           {tagItems.map((tag) => (
                             <div key={tag} className="inline-flex items-center gap-1 rounded-md border bg-muted/50 px-2.5 py-1 text-xs font-medium text-secondary-foreground transition-colors hover:bg-muted">
-                              {tag}
+                              {t(`options.${tag}`)}
                               <button
                                 type="button"
                                 className="ml-1 rounded-full outline-none ring-offset-background focus:ring-2 focus:ring-ring focus:ring-offset-2"
@@ -358,19 +375,19 @@ export default function Home() {
                             </div>
                           ))}
                           <button type="button" className="inline-flex items-center gap-1 rounded-md border border-dashed px-2 py-1 text-xs text-muted-foreground hover:text-foreground">
-                            <Plus className="h-3 w-3" /> Adicionar
+                            <Plus className="h-3 w-3" /> {t("add")}
                           </button>
                         </div>
                       </div>
                     </div>
 
                     <div className="gap-2 flex flex-col">
-                      <Label className="text-sm font-medium">Opções Adicionais</Label>
+                      <Label className="text-sm font-medium">{t("additionalOptions")}</Label>
                       <div className="min-h-[48px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm shadow-sm">
                         <div className="flex flex-wrap gap-2">
                           {optionItems.map((option) => (
                             <div key={option} className="inline-flex items-center gap-1 rounded-md border bg-muted/50 px-2.5 py-1 text-xs font-medium text-secondary-foreground transition-colors hover:bg-muted">
-                              {option}
+                              {t(`options.${option}`)}
                               <button
                                 type="button"
                                 className="ml-1 rounded-full outline-none ring-offset-background focus:ring-2 focus:ring-ring focus:ring-offset-2"
@@ -380,7 +397,7 @@ export default function Home() {
                             </div>
                           ))}
                            <button type="button" className="inline-flex items-center gap-1 rounded-md border border-dashed px-2 py-1 text-xs text-muted-foreground hover:text-foreground">
-                            <Plus className="h-3 w-3" /> Adicionar
+                            <Plus className="h-3 w-3" /> {t("add")}
                           </button>
                         </div>
                       </div>
@@ -394,14 +411,14 @@ export default function Home() {
                       onClick={() => setIsDialogOpen(false)}
                       className="h-10"
                     >
-                      Cancelar
+                      {t("cancel")}
                     </Button>
                     <Button
                       form="transfer-form"
                       type="submit"
                       className="gap-2 h-10 px-6"
                     >
-                      Salvar Transfer
+                      {t("save")}
                       <ArrowRight className="h-4 w-4" />
                     </Button>
                   </div>
@@ -429,37 +446,37 @@ export default function Home() {
                   </TableHead>
                   <TableHead className="text-muted-foreground cursor-pointer hover:bg-muted/50" onClick={() => toggleSort("id")}>
                     <span className="flex items-center gap-2 text-xs font-medium uppercase tracking-wide">
-                      ID
+                      {t("table.id")}
                       {getSortIcon("id")}
                     </span>
                   </TableHead>
                   <TableHead className="text-muted-foreground cursor-pointer hover:bg-muted/50" onClick={() => toggleSort("title")}>
                     <span className="flex items-center gap-2 text-xs font-medium uppercase tracking-wide">
-                      Título
+                      {t("table.title")}
                       {getSortIcon("title")}
                     </span>
                   </TableHead>
                   <TableHead className="text-muted-foreground cursor-pointer hover:bg-muted/50" onClick={() => toggleSort("mode")}>
                     <span className="flex items-center gap-2 text-xs font-medium uppercase tracking-wide">
-                      Modo
+                      {t("table.mode")}
                       {getSortIcon("mode")}
                     </span>
                   </TableHead>
                   <TableHead className="text-muted-foreground cursor-pointer hover:bg-muted/50" onClick={() => toggleSort("status")}>
                     <span className="flex items-center gap-2 text-xs font-medium uppercase tracking-wide">
-                      Status
+                      {t("table.status")}
                       {getSortIcon("status")}
                     </span>
                   </TableHead>
                   <TableHead className="text-muted-foreground cursor-pointer hover:bg-muted/50" onClick={() => toggleSort("createdAt")}>
                     <span className="flex items-center gap-2 text-xs font-medium uppercase tracking-wide">
-                      Criado em
+                      {t("table.createdAt")}
                       {getSortIcon("createdAt")}
                     </span>
                   </TableHead>
                   <TableHead className="text-muted-foreground cursor-pointer hover:bg-muted/50" onClick={() => toggleSort("lastUpdate")}>
                     <span className="flex items-center gap-2 text-xs font-medium uppercase tracking-wide">
-                      Última alteração
+                      {t("table.lastUpdate")}
                       {getSortIcon("lastUpdate")}
                     </span>
                   </TableHead>
@@ -484,12 +501,12 @@ export default function Home() {
                       {transfer.title}
                     </TableCell>
                     <TableCell className="text-sm text-muted-foreground">
-                      {transfer.mode}
+                      {t(`options.${transfer.mode}`)}
                     </TableCell>
                     <TableCell>
                       <span className="flex items-center gap-2 text-sm text-foreground">
                         <span className="h-2 w-2 rounded-full bg-emerald-500" aria-hidden="true" />
-                        {transfer.status}
+                        {t(`options.${transfer.status}`)}
                       </span>
                     </TableCell>
                     <TableCell className="text-sm text-muted-foreground">
@@ -507,7 +524,7 @@ export default function Home() {
           {/* Footer */}
           <div className="flex flex-col gap-4 border-t border-border/60 px-6 py-4 md:flex-row md:items-center md:justify-between">
             <p className="text-sm text-muted-foreground">
-              {selectedRows.size} de {sortedTransfers.length} linha(s) selecionadas.
+              {t("table.selectedRows", { selected: selectedRows.size, total: sortedTransfers.length })}
             </p>
 
             <div className="flex flex-wrap items-center gap-3">
@@ -516,7 +533,7 @@ export default function Home() {
                 size="lg"
                 className="rounded-lg border-border/60 bg-muted/30 px-3 text-sm"
               >
-                10 / página
+                {t("table.perPage", { count: 10 })}
                 <ChevronDown className="h-4 w-4" />
               </Button>
 
@@ -544,7 +561,7 @@ export default function Home() {
                 </Button>
               </div>
 
-              <span className="text-sm text-muted-foreground">Página 1 de 4</span>
+              <span className="text-sm text-muted-foreground">{t("table.pageInfo", { current: 1, total: 4 })}</span>
             </div>
           </div>
         </div>

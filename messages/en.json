@@ -1,0 +1,90 @@
+{
+  "HomePage": {
+    "title": "Hello world!",
+    "about": "Go to the about page"
+  },
+  "Navigation": {
+    "home": "Home",
+    "about": "About"
+  },
+  "Header": {
+    "title": "Transfer",
+    "searchPlaceholder": "Search...",
+    "toggleTheme": "Toggle theme"
+  },
+  "Sidebar": {
+    "Principal": "Principal",
+    "Dashboard": "Dashboard",
+    "Activity": "Activity",
+    "Services": "Services",
+    "Transfer": "Transfer",
+    "Combo": "Combo",
+    "Hosting": "Hosting",
+    "Ticket": "Ticket",
+    "Tour": "Tour",
+    "Experience": "Experience",
+    "Circuit": "Circuit",
+    "Commercial": "Commercial",
+    "Tariff": "Tariff",
+    "Availability": "Availability",
+    "Addons": "Addons",
+    "Slots": "Slots",
+    "Perimeters": "Perimeters",
+    "Guidelines": "Guidelines",
+    "Organization": "Organization",
+    "Settings": "Settings"
+  },
+  "Transfers": {
+    "searchPlaceholder": "Search...",
+    "mode": "Mode",
+    "status": "Status",
+    "refresh": "Refresh",
+    "refreshing": "Refreshing",
+    "export": "Export",
+    "exportCSV": "Export CSV",
+    "exportExcel": "Export Excel",
+    "exportPDF": "Export PDF",
+    "add": "Add",
+    "newTransfer": "New Transfer",
+    "newTransferDesc": "Fill in the service details below.",
+    "titleLabel": "Transfer Title",
+    "titlePlaceholder": "Ex.: Regular Transfer - Airport x Hotel",
+    "transportType": "Transport Type",
+    "slotType": "Slot Type",
+    "tariffType": "Tariff Type",
+    "childAge": "Child Age (Years)",
+    "min": "Min",
+    "max": "Max",
+    "regionalTags": "Regional Tags",
+    "additionalOptions": "Additional Options",
+    "cancel": "Cancel",
+    "save": "Save Transfer",
+    "table": {
+      "id": "ID",
+      "title": "Title",
+      "mode": "Mode",
+      "status": "Status",
+      "createdAt": "Created At",
+      "lastUpdate": "Last Update",
+      "selectedRows": "{selected} of {total} row(s) selected.",
+      "perPage": "{count} / page",
+      "pageInfo": "Page {current} of {total}"
+    },
+    "options": {
+      "Compartilhado": "Shared",
+      "Privado": "Private",
+      "Executivo": "Executive",
+      "Liberado": "Released",
+      "Turno": "Shift",
+      "Período": "Period",
+      "Evento": "Event",
+      "Faixa Etária": "Age Range",
+      "Valor Fixo": "Fixed Value",
+      "Por Passageiro": "Per Passenger",
+      "Região dos Lagos": "Lakes Region",
+      "Rio x Rio": "Rio x Rio",
+      "Confirmação Imediata": "Immediate Confirmation",
+      "Utilização somente no dia": "Use Only on Day"
+    }
+  }
+}
